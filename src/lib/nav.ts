@@ -1,4 +1,5 @@
 export const mainNav = [
+  { href: "/a-propos", label: "À propos" },
   { href: "/methode-egyptienne", label: "Méthode" },
   { href: "/programme", label: "Programme" },
   { href: "/tarifs", label: "Tarifs" },

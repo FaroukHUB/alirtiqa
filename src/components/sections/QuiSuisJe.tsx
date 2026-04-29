@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
 
@@ -143,7 +144,55 @@ function Quote({
   );
 }
 
-export function QuiSuisJe() {
+function ReadMore({ href }: { href: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, delay: 0.15, ease }}
+      className="flex justify-center pt-6"
+    >
+      <Link
+        href={href}
+        className="group inline-flex items-center gap-3 font-display text-xs uppercase tracking-[0.4em] text-dore-600 transition-colors duration-300 hover:text-dore-500"
+      >
+        <span className="relative pb-1">
+          Lire la suite
+          <span
+            aria-hidden
+            className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-dore-600 transition-transform duration-500 ease-out group-hover:scale-x-100"
+          />
+        </span>
+        <svg
+          width="14"
+          height="10"
+          viewBox="0 0 14 10"
+          fill="none"
+          aria-hidden
+          className="translate-y-[1px] transition-transform duration-300 group-hover:translate-x-1"
+        >
+          <path
+            d="M0 5h12M8 1l4 4-4 4"
+            stroke="currentColor"
+            strokeWidth="1.1"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </Link>
+    </motion.div>
+  );
+}
+
+export function QuiSuisJe({
+  truncated = false,
+  asH1 = true,
+}: {
+  truncated?: boolean;
+  asH1?: boolean;
+}) {
+  const Heading = asH1 ? "h1" : "h2";
   return (
     <section id="qui-suis-je" className="relative bg-creme py-24 sm:py-32">
       <div
@@ -159,9 +208,9 @@ export function QuiSuisJe() {
           transition={{ duration: 0.7, ease }}
           className="mb-14 text-center"
         >
-          <h1 className="font-display text-4xl text-nuit sm:text-5xl md:text-6xl">
+          <Heading className="font-display text-4xl text-nuit sm:text-5xl md:text-6xl">
             Qui suis-je
-          </h1>
+          </Heading>
           <motion.div
             aria-hidden
             initial={{ width: 0, opacity: 0 }}
@@ -187,23 +236,29 @@ export function QuiSuisJe() {
             <Ornament className="opacity-60" />
           </motion.div>
 
-          {intro.slice(1).map((p, i) => (
+          {(truncated ? intro.slice(1, 4) : intro.slice(1)).map((p, i) => (
             <Reveal key={`intro-${i + 1}`}>{p}</Reveal>
           ))}
 
-          <Quote intro={<>Le Prophète ﷺ a dit :</>} ar={hadithArabic} fr={hadithFr} />
+          {truncated ? (
+            <ReadMore href="/a-propos" />
+          ) : (
+            <>
+              <Quote intro={<>Le Prophète ﷺ a dit :</>} ar={hadithArabic} fr={hadithFr} />
 
-          <Reveal>{middle}</Reveal>
+              <Reveal>{middle}</Reveal>
 
-          <Reveal>
-            Shaykh al-Islām Ibn Taymiyyah <span lang="ar">رحمه الله</span> a dit :
-          </Reveal>
+              <Reveal>
+                Shaykh al-Islām Ibn Taymiyyah <span lang="ar">رحمه الله</span> a dit :
+              </Reveal>
 
-          <Quote ar={ibnTaymiyyahArabic} fr={ibnTaymiyyahFr} size="lg" />
+              <Quote ar={ibnTaymiyyahArabic} fr={ibnTaymiyyahFr} size="lg" />
 
-          {outro.map((p, i) => (
-            <Reveal key={`outro-${i}`}>{p}</Reveal>
-          ))}
+              {outro.map((p, i) => (
+                <Reveal key={`outro-${i}`}>{p}</Reveal>
+              ))}
+            </>
+          )}
         </article>
       </div>
     </section>

@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <main>
       <Hero />
-      <QuiSuisJe />
+      <QuiSuisJe truncated asH1={false} />
       <Divider />
       <Methode />
       <Niveaux />
