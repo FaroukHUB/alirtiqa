@@ -8,7 +8,6 @@ const ease = [0.16, 1, 0.3, 1] as const;
 type Avis = {
   nom: string;
   flag?: string;
-  date?: string;
   stars?: number;
   texte: string;
 };
@@ -23,7 +22,6 @@ const avis: Avis[] = [
   {
     nom: "Stefano",
     flag: "🇮🇹",
-    date: "Il y a 2 semaines",
     stars: 5,
     texte:
       "Je suis ravi d'avoir rencontré Tarek et d'apprendre l'arabe avec lui. Tarek est un professeur très compétent qui a parfaitement compris mes besoins d'amélioration. Ses supports pédagogiques sont excellents et ses cours sont parfaitement organisés. J'ai particulièrement apprécié la richesse des informations qu'il partage et son incroyable patience. Un grand merci, Tarek !",
@@ -120,11 +118,6 @@ function AvisCard({ a }: { a: Avis }) {
               </span>
             )}
           </h3>
-          {a.date && (
-            <p className="mt-0.5 text-[11px] uppercase tracking-[0.18em] text-nuit/50">
-              {a.date}
-            </p>
-          )}
         </div>
       </motion.header>
 
