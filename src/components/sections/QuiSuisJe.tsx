@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import type { ReactNode } from "react";
@@ -144,6 +145,33 @@ function Quote({
   );
 }
 
+function Portrait({ className = "" }: { className?: string }) {
+  return (
+    <motion.figure
+      initial={{ opacity: 0, scale: 0.96, y: 16 }}
+      whileInView={{ opacity: 1, scale: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ duration: 0.85, ease }}
+      className={`relative ${className}`}
+    >
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -inset-2 -z-10 rounded-[1.4rem] bg-gradient-to-br from-dore/35 via-dore/10 to-transparent blur-md"
+      />
+      <div className="overflow-hidden rounded-2xl border border-dore/20 bg-creme shadow-[0_18px_50px_rgba(10,26,63,0.14)]">
+        <Image
+          src="/images/tarek.webp"
+          alt="Tarek Abou Zeyneb"
+          width={1428}
+          height={1101}
+          sizes="(max-width: 768px) 90vw, 320px"
+          className="h-auto w-full"
+        />
+      </div>
+    </motion.figure>
+  );
+}
+
 function ReadMore({ href }: { href: string }) {
   return (
     <motion.div
@@ -236,9 +264,15 @@ export function QuiSuisJe({
             <Ornament className="opacity-60" />
           </motion.div>
 
-          {(truncated ? intro.slice(1, 4) : intro.slice(1)).map((p, i) => (
-            <Reveal key={`intro-${i + 1}`}>{p}</Reveal>
-          ))}
+          <div className="md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,300px)] md:items-start md:gap-12">
+            <Portrait className="mb-9 md:order-2 md:mb-0" />
+
+            <div className="space-y-7 md:order-1">
+              {(truncated ? intro.slice(1, 4) : intro.slice(1)).map((p, i) => (
+                <Reveal key={`intro-${i + 1}`}>{p}</Reveal>
+              ))}
+            </div>
+          </div>
 
           {truncated ? (
             <ReadMore href="/a-propos" />
