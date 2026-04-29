@@ -33,8 +33,8 @@ export function Header() {
   return (
     <>
       <header className="sticky top-0 z-40 border-b border-dore/15 bg-nuit/85 backdrop-blur supports-[backdrop-filter]:bg-nuit/70">
-        <div className="container-prose flex h-16 items-center justify-between">
-          <Logo size="md" tone="light" withWordmark />
+        <div className="container-prose flex h-20 items-center justify-between">
+          <Logo size="md" tone="light" />
 
           <nav className="hidden items-center gap-8 md:flex">
             {mainNav.map((item) => (
@@ -152,8 +152,8 @@ export function Header() {
                 </ButtonLink>
               </div>
 
-              <div className="flex items-center justify-center px-6 pb-8 pt-10">
-                <Logo size="sm" tone="dark" href={null} />
+              <div className="flex items-center justify-center px-6 pb-10 pt-12">
+                <Logo size="lg" tone="dark" href={null} />
               </div>
             </motion.aside>
           </>

@@ -4,7 +4,7 @@ import { cn } from "@/lib/cn";
 
 type Size = "sm" | "md" | "lg";
 
-const heights: Record<Size, number> = { sm: 32, md: 44, lg: 64 };
+const heights: Record<Size, number> = { sm: 40, md: 60, lg: 110 };
 const intrinsic = { w: 1024, h: 1536 };
 
 export function Logo({
