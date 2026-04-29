@@ -164,7 +164,7 @@ function Portrait({ className = "" }: { className?: string }) {
           alt="Tarek Abou Zeyneb"
           width={1428}
           height={1101}
-          sizes="(max-width: 768px) 90vw, 320px"
+          sizes="(max-width: 768px) 90vw, (max-width: 1280px) 45vw, 600px"
           className="h-auto w-full"
         />
       </div>
@@ -228,13 +228,13 @@ export function QuiSuisJe({
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-dore/40 to-transparent"
       />
 
-      <div className="mx-auto w-full max-w-3xl px-6 sm:px-8">
+      <div className="mx-auto w-full max-w-7xl px-6 sm:px-8">
         <motion.header
           initial={{ opacity: 0, y: 14 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease }}
-          className="mb-14 text-center"
+          className="mx-auto mb-14 max-w-3xl text-center"
         >
           <Heading className="font-display text-4xl text-nuit sm:text-5xl md:text-6xl">
             Qui suis-je
@@ -251,7 +251,9 @@ export function QuiSuisJe({
         </motion.header>
 
         <article className="space-y-9">
-          <Lead>{intro[0]}</Lead>
+          <div className="mx-auto max-w-3xl">
+            <Lead>{intro[0]}</Lead>
+          </div>
 
           <motion.div
             aria-hidden
@@ -264,7 +266,7 @@ export function QuiSuisJe({
             <Ornament className="opacity-60" />
           </motion.div>
 
-          <div className="md:grid md:grid-cols-[minmax(0,1fr)_minmax(0,300px)] md:items-start md:gap-12">
+          <div className="md:grid md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] md:items-start md:gap-12 lg:gap-16">
             <Portrait className="mb-9 md:order-2 md:mb-0" />
 
             <div className="space-y-7 md:order-1">
@@ -274,25 +276,27 @@ export function QuiSuisJe({
             </div>
           </div>
 
-          {truncated ? (
-            <ReadMore href="/a-propos" />
-          ) : (
-            <>
-              <Quote intro={<>Le Prophète ﷺ a dit :</>} ar={hadithArabic} fr={hadithFr} />
+          <div className="mx-auto max-w-3xl space-y-9">
+            {truncated ? (
+              <ReadMore href="/a-propos" />
+            ) : (
+              <>
+                <Quote intro={<>Le Prophète ﷺ a dit :</>} ar={hadithArabic} fr={hadithFr} />
 
-              <Reveal>{middle}</Reveal>
+                <Reveal>{middle}</Reveal>
 
-              <Reveal>
-                Shaykh al-Islām Ibn Taymiyyah <span lang="ar">رحمه الله</span> a dit :
-              </Reveal>
+                <Reveal>
+                  Shaykh al-Islām Ibn Taymiyyah <span lang="ar">رحمه الله</span> a dit :
+                </Reveal>
 
-              <Quote ar={ibnTaymiyyahArabic} fr={ibnTaymiyyahFr} size="lg" />
+                <Quote ar={ibnTaymiyyahArabic} fr={ibnTaymiyyahFr} size="lg" />
 
-              {outro.map((p, i) => (
-                <Reveal key={`outro-${i}`}>{p}</Reveal>
-              ))}
-            </>
-          )}
+                {outro.map((p, i) => (
+                  <Reveal key={`outro-${i}`}>{p}</Reveal>
+                ))}
+              </>
+            )}
+          </div>
         </article>
       </div>
     </section>
