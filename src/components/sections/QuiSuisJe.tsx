@@ -47,6 +47,25 @@ function Reveal({ children, delay = 0, as = "p" }: { children: ReactNode; delay?
   );
 }
 
+function Lead({ children }: { children: ReactNode }) {
+  return (
+    <motion.p
+      initial={{ opacity: 0, y: 22 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-90px" }}
+      transition={{ duration: 0.85, ease }}
+      className={[
+        "text-lg leading-[1.8] text-nuit sm:text-xl sm:leading-[1.85]",
+        "first-letter:float-left first-letter:mr-3 first-letter:mt-1",
+        "first-letter:font-display first-letter:text-[5.5rem] first-letter:leading-[0.82] first-letter:text-dore-600",
+        "sm:first-letter:text-[6.5rem]",
+      ].join(" ")}
+    >
+      {children}
+    </motion.p>
+  );
+}
+
 function Ornament({ className = "" }: { className?: string }) {
   return (
     <svg
@@ -154,9 +173,22 @@ export function QuiSuisJe() {
           <Ornament className="mx-auto mt-6" />
         </motion.header>
 
-        <article className="space-y-7">
-          {intro.map((p, i) => (
-            <Reveal key={`intro-${i}`}>{p}</Reveal>
+        <article className="space-y-9">
+          <Lead>{intro[0]}</Lead>
+
+          <motion.div
+            aria-hidden
+            initial={{ opacity: 0, scale: 0.85 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.6, delay: 0.2, ease }}
+            className="flex justify-center pt-2"
+          >
+            <Ornament className="opacity-60" />
+          </motion.div>
+
+          {intro.slice(1).map((p, i) => (
+            <Reveal key={`intro-${i + 1}`}>{p}</Reveal>
           ))}
 
           <Quote intro={<>Le Prophète ﷺ a dit :</>} ar={hadithArabic} fr={hadithFr} />
