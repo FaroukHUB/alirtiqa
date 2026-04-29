@@ -1,6 +1,7 @@
 import { Hero } from "@/components/sections/Hero";
 import { Methode } from "@/components/sections/Methode";
 import { Niveaux } from "@/components/sections/Niveaux";
+import { Programmes } from "@/components/sections/Programmes";
 
 export default function HomePage() {
   return (
@@ -8,6 +9,7 @@ export default function HomePage() {
       <Hero />
       <Methode />
       <Niveaux />
+      <Programmes />
     </main>
   );
 }
