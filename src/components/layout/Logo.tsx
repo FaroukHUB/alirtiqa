@@ -4,8 +4,8 @@ import { cn } from "@/lib/cn";
 
 type Size = "sm" | "md" | "lg";
 
-const heights: Record<Size, number> = { sm: 48, md: 88, lg: 220 };
-const intrinsic = { w: 1024, h: 1536 };
+const heights: Record<Size, number> = { sm: 44, md: 72, lg: 180 };
+const intrinsic = { w: 740, h: 844 };
 
 export function Logo({
   className,
