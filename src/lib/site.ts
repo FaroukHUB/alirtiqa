@@ -11,7 +11,7 @@ export const site = {
     whatsappDisplay: "06 50 84 97 38",
     email: "al-irtiqa@outlook.com",
     telegram: "@Alirtiqafilougha_cours_arabes",
-    instagram: "institut_alirtiqa",
+    instagram: "institut.alirtiqa",
   },
   pricing: {
     particulier: 72,
