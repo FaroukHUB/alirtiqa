@@ -4,57 +4,41 @@ import { cn } from "@/lib/cn";
 
 type Size = "sm" | "md" | "lg";
 
-const heights: Record<Size, number> = { sm: 44, md: 72, lg: 180 };
-const intrinsic = { w: 740, h: 844 };
+const heights: Record<Size, number> = { sm: 56, md: 72, lg: 180 };
+const ratio = 740 / 844;
 
 export function Logo({
   className,
   size = "md",
-  withWordmark = false,
-  tone = "light",
   href = "/",
 }: {
   className?: string;
   size?: Size;
-  withWordmark?: boolean;
   tone?: "light" | "dark";
   href?: string | null;
 }) {
   const h = heights[size];
-  const w = Math.round((h * intrinsic.w) / intrinsic.h);
-  const wordmarkColor = tone === "light" ? "text-creme" : "text-nuit";
+  const w = Math.round(h * ratio);
 
-  const content = (
-    <>
-      <Image
-        src="/images/logoirtiqa.webp"
-        alt="Institut Al-Irtiqā'"
-        width={w}
-        height={h}
-        priority={size !== "sm"}
-        className="h-auto w-auto"
-        style={{ height: h, width: w }}
-      />
-      {withWordmark && (
-        <span
-          className={cn(
-            "font-display text-base tracking-[0.18em] uppercase sm:text-lg",
-            wordmarkColor,
-          )}
-        >
-          Al-Irtiqā&apos;
-        </span>
-      )}
-    </>
+  const img = (
+    <Image
+      src="/images/logoirtiqa.webp"
+      alt="Institut Al-Irtiqā'"
+      width={w}
+      height={h}
+      priority={size !== "sm"}
+      className="block select-none"
+      style={{ height: h, width: w, maxWidth: "none" }}
+      draggable={false}
+    />
   );
 
-  if (!href) {
-    return <span className={cn("inline-flex items-center gap-3", className)}>{content}</span>;
-  }
+  const wrapperCls = cn("inline-flex shrink-0 items-center", className);
 
+  if (!href) return <span className={wrapperCls}>{img}</span>;
   return (
-    <Link href={href} className={cn("inline-flex items-center gap-3", className)}>
-      {content}
+    <Link href={href} className={wrapperCls}>
+      {img}
     </Link>
   );
 }
