@@ -53,25 +53,25 @@ export function Hero() {
 
       <svg
         aria-hidden
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[120%] w-[130%] -translate-x-1/2 -translate-y-1/2"
-        viewBox="0 0 800 400"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[90%] w-[95%] max-w-[1100px] -translate-x-1/2 -translate-y-1/2"
+        viewBox="0 0 1200 500"
         preserveAspectRatio="xMidYMid meet"
       >
         <motion.text
-          x="400"
-          y="280"
+          x="600"
+          y="320"
           textAnchor="middle"
           fontFamily="'Amiri', 'Noto Naskh Arabic', 'Scheherazade New', serif"
-          fontSize="300"
+          fontSize="200"
           fontWeight="500"
           fill="none"
           stroke="#C9A961"
           strokeWidth="1.1"
           strokeLinecap="round"
           strokeLinejoin="round"
-          strokeDasharray={3000}
-          initial={{ strokeDashoffset: 3000, opacity: 0 }}
-          animate={{ strokeDashoffset: 0, opacity: 0.18 }}
+          strokeDasharray={2400}
+          initial={{ strokeDashoffset: 2400, opacity: 0 }}
+          animate={{ strokeDashoffset: 0, opacity: 0.2 }}
           transition={{ duration: 3.6, ease: "easeOut", delay: 0.2 }}
         >
           الارتقاء
