@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { ButtonLink } from "@/components/ui/Button";
 import { site } from "@/lib/site";
@@ -26,9 +27,28 @@ export function Hero() {
 
   return (
     <section className="relative isolate overflow-hidden bg-nuit text-creme">
+      <Image
+        src="/images/heromerkez.webp"
+        alt=""
+        fill
+        priority
+        quality={90}
+        sizes="100vw"
+        className="object-cover object-center"
+      />
+
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-arabesque bg-[length:480px] opacity-[0.05]"
+        className="absolute inset-0 bg-gradient-to-b from-nuit/75 via-nuit/55 to-nuit/85"
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_transparent_30%,_rgba(10,26,63,0.55)_85%)]"
+      />
+
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-arabesque bg-[length:480px] opacity-[0.03] mix-blend-overlay"
       />
 
       <svg
@@ -51,7 +71,7 @@ export function Hero() {
           strokeLinejoin="round"
           strokeDasharray={3000}
           initial={{ strokeDashoffset: 3000, opacity: 0 }}
-          animate={{ strokeDashoffset: 0, opacity: 0.2 }}
+          animate={{ strokeDashoffset: 0, opacity: 0.18 }}
           transition={{ duration: 3.6, ease: "easeOut", delay: 0.2 }}
         >
           الارتقاء
@@ -115,7 +135,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mb-5 font-display text-sm uppercase tracking-[0.4em] text-dore"
+          className="mb-5 font-display text-sm uppercase tracking-[0.4em] text-dore drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)]"
         >
           Institut Al-Irtiqā&apos;
         </motion.p>
@@ -128,7 +148,7 @@ export function Hero() {
           transition={{ duration: 0.9, delay: 0.45, ease: "easeOut" }}
         />
 
-        <h1 className="text-balance font-display text-4xl font-medium leading-[1.1] sm:text-5xl md:text-6xl">
+        <h1 className="text-balance font-display text-4xl font-medium leading-[1.1] drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)] sm:text-5xl md:text-6xl">
           <span className="sr-only">{site.tagline}</span>
           <span aria-hidden className="block">
             {titleWords.map((word, i) => (
@@ -159,7 +179,7 @@ export function Hero() {
             delay: 1.05 + titleWords.length * 0.11,
             ease: "easeOut",
           }}
-          className="mt-7 max-w-2xl text-balance text-lg text-creme/80"
+          className="mt-7 max-w-2xl text-balance text-lg text-creme/85 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
         >
           15 niveaux progressifs, cours en ligne via Zoom, fondés sur l&apos;Ajurrumiyya
           et Al-Furqan. Pour francophones, à partir de 10 ans.
