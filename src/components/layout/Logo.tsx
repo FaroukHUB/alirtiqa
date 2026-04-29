@@ -4,7 +4,7 @@ import { cn } from "@/lib/cn";
 
 type Size = "sm" | "md" | "lg";
 
-const heights: Record<Size, number> = { sm: 56, md: 72, lg: 180 };
+const heights: Record<Size, number> = { sm: 64, md: 84, lg: 200 };
 const ratio = 740 / 844;
 
 export function Logo({
