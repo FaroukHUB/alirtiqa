@@ -35,7 +35,6 @@ export const formules: Formule[] = [
       "Tarif préférentiel par rapport au particulier",
       "Émulation et entraide entre les séances",
     ],
-    badge: "Recommandé",
   },
   {
     slug: "groupe",
