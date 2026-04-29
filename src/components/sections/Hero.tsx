@@ -181,8 +181,8 @@ export function Hero() {
           }}
           className="mt-7 max-w-2xl text-balance text-lg text-creme/85 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
         >
-          15 niveaux progressifs, cours en ligne via Zoom, fondés sur l&apos;Ajurrumiyya
-          et Al-Furqan. Pour francophones, à partir de 10 ans.
+          15 niveaux progressifs, cours en ligne via Zoom, fondés sur le programme
+          Al-Furqan et Al-Ajurrumiyya. Pour francophones, à partir de 10 ans.
         </motion.p>
 
         <motion.div

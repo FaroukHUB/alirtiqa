@@ -49,12 +49,6 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="hidden md:block">
-            <ButtonLink href="/inscription" className="px-5 py-2 text-sm">
-              Inscription
-            </ButtonLink>
-          </div>
-
           <button
             type="button"
             aria-label="Ouvrir le menu"
