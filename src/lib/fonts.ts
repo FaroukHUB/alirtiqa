@@ -1,4 +1,4 @@
-import { Cinzel, Inter } from "next/font/google";
+import { Amiri, Cinzel, Inter } from "next/font/google";
 
 export const cinzel = Cinzel({
   subsets: ["latin"],
@@ -11,4 +11,11 @@ export const inter = Inter({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-inter",
+});
+
+export const amiri = Amiri({
+  subsets: ["arabic"],
+  display: "swap",
+  variable: "--font-arabic",
+  weight: ["400", "700"],
 });

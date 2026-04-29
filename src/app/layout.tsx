@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { cinzel, inter } from "@/lib/fonts";
+import { amiri, cinzel, inter } from "@/lib/fonts";
 import { site } from "@/lib/site";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
@@ -48,7 +48,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="fr" className={`${cinzel.variable} ${inter.variable}`}>
+    <html lang="fr" className={`${cinzel.variable} ${inter.variable} ${amiri.variable}`}>
       <body className="flex min-h-screen flex-col font-sans">
         <JsonLd />
         <Header />

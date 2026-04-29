@@ -43,6 +43,7 @@ const config: Config = {
       fontFamily: {
         display: ["var(--font-cinzel)", "serif"],
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        arabic: ["var(--font-arabic)", "'Amiri'", "'Noto Naskh Arabic'", "serif"],
       },
       backgroundImage: {
         "arabesque": "url('/patterns/arabesque.svg')",
