@@ -222,7 +222,7 @@ export function QuiSuisJe({
 }) {
   const Heading = asH1 ? "h1" : "h2";
   return (
-    <section id="qui-suis-je" className="relative bg-creme py-24 sm:py-32">
+    <section id="qui-suis-je" className="relative bg-creme py-14 sm:py-20">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-dore/40 to-transparent"

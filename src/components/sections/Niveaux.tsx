@@ -14,7 +14,7 @@ const cycleAccent: Record<(typeof cycles)[number], string> = {
 
 export function Niveaux() {
   return (
-    <section id="niveaux" className="relative bg-nuit text-creme py-24 sm:py-32">
+    <section id="niveaux" className="relative bg-nuit text-creme py-14 sm:py-20">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 bg-arabesque bg-[length:520px] opacity-[0.04]"

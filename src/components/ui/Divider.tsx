@@ -8,7 +8,7 @@ export function Divider() {
   return (
     <div
       aria-hidden
-      className="relative bg-creme py-16 sm:py-24"
+      className="relative bg-creme py-8 sm:py-12"
     >
       <div className="mx-auto w-full max-w-3xl px-6 sm:px-8">
         <div className="relative flex items-center justify-center">

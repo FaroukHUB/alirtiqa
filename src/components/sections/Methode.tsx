@@ -129,7 +129,7 @@ function Icon({ kind }: { kind: IconKey }) {
 
 export function Methode() {
   return (
-    <section id="methode" className="relative bg-creme py-24 sm:py-32">
+    <section id="methode" className="relative bg-creme py-14 sm:py-20">
       <div className="container-prose">
         <SectionHeading
           kicker="Notre méthode"

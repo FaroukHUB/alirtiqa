@@ -7,7 +7,7 @@ import { formules } from "@/lib/formules";
 
 export function Programmes() {
   return (
-    <section id="programmes" className="bg-creme py-24 sm:py-32">
+    <section id="programmes" className="bg-creme py-14 sm:py-20">
       <div className="container-prose">
         <SectionHeading
           kicker="Formules"

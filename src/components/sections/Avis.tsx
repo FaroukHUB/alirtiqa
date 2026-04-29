@@ -136,7 +136,7 @@ function AvisCard({ a }: { a: Avis }) {
 
 export function Avis() {
   return (
-    <section id="avis" className="relative bg-creme py-24 sm:py-32">
+    <section id="avis" className="relative bg-creme py-14 sm:py-20">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-dore/35 to-transparent"

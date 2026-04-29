@@ -33,7 +33,7 @@ const modalites = [
 
 export function Tarifs() {
   return (
-    <section id="tarifs" className="bg-creme py-24 sm:py-32">
+    <section id="tarifs" className="bg-creme py-14 sm:py-20">
       <div
         aria-hidden
         className="pointer-events-none absolute inset-x-0 -mt-24 h-px bg-gradient-to-r from-transparent via-dore/40 to-transparent"

@@ -22,7 +22,7 @@ export function CtaFinale() {
         className="pointer-events-none absolute -left-32 top-1/2 h-[480px] w-[480px] -translate-y-1/2 rounded-full bg-dore/10 blur-3xl"
       />
 
-      <div className="container-prose relative py-24 sm:py-32">
+      <div className="container-prose relative py-14 sm:py-20">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
