@@ -103,33 +103,26 @@ function Icon({ kind }: { kind: IconKey }) {
   }
 
   if (kind === "ajurrumiyya") {
+    // Livre fermé en couverture avec losange central — différent du livre ouvert d'Al-Furqan
     return (
       <motion.svg variants={iconBoxVariants} className={wrapperCls} {...baseProps}>
-        <motion.path
-          variants={pathVariants}
-          d="M14 14 H50 V50 H14 Z"
-        />
-        <motion.path
-          variants={pathVariants}
-          d="M32 6 L46 18 L58 32 L46 46 L32 58 L18 46 L6 32 L18 18 Z"
-        />
-        <motion.circle variants={pathVariants} cx="32" cy="32" r="6" />
+        <motion.path variants={pathVariants} d="M16 8 H48 V56 H16 Z" />
+        <motion.path variants={pathVariants} d="M22 8 V56" />
+        <motion.path variants={pathVariants} d="M26 14 H46" />
+        <motion.path variants={pathVariants} d="M26 50 H46" />
+        <motion.path variants={pathVariants} d="M36 24 L42 32 L36 40 L30 32 Z" />
+        <motion.circle variants={pathVariants} cx="36" cy="32" r="1.6" />
       </motion.svg>
     );
   }
 
-  // pedagogie — lanterne
+  // pedagogie — croissant de lune
   return (
     <motion.svg variants={iconBoxVariants} className={wrapperCls} {...baseProps}>
-      <motion.path variants={pathVariants} d="M32 6 V12" />
-      <motion.path variants={pathVariants} d="M22 12 H42" />
-      <motion.path variants={pathVariants} d="M22 18 L26 12 H38 L42 18" />
-      <motion.path variants={pathVariants} d="M22 18 H42 V24 H22 Z" />
-      <motion.path variants={pathVariants} d="M24 24 V46 H40 V24" />
-      <motion.path variants={pathVariants} d="M24 40 H40" />
-      <motion.path variants={pathVariants} d="M24 46 L28 50 H36 L40 46" />
-      <motion.path variants={pathVariants} d="M28 50 V56 H36 V50" />
-      <motion.circle variants={pathVariants} cx="32" cy="32" r="3.5" />
+      <motion.path
+        variants={pathVariants}
+        d="M54 36 A22 22 0 1 1 28 10 A18 18 0 0 0 54 36 Z"
+      />
     </motion.svg>
   );
 }
