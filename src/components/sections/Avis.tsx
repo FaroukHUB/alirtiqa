@@ -1,0 +1,171 @@
+"use client";
+
+import { motion } from "framer-motion";
+import { SectionHeading } from "@/components/ui/SectionHeading";
+
+const ease = [0.16, 1, 0.3, 1] as const;
+
+type Avis = {
+  nom: string;
+  flag?: string;
+  date?: string;
+  stars?: number;
+  texte: string;
+};
+
+const avis: Avis[] = [
+  {
+    nom: "Mokrane",
+    stars: 5,
+    texte:
+      "frère très pédagogue avec des explications claires Allahibarek, qui rend agréable l'apprentissage",
+  },
+  {
+    nom: "Stefano",
+    flag: "🇮🇹",
+    date: "Il y a 2 semaines",
+    stars: 5,
+    texte:
+      "Je suis ravi d'avoir rencontré Tarek et d'apprendre l'arabe avec lui. Tarek est un professeur très compétent qui a parfaitement compris mes besoins d'amélioration. Ses supports pédagogiques sont excellents et ses cours sont parfaitement organisés. J'ai particulièrement apprécié la richesse des informations qu'il partage et son incroyable patience. Un grand merci, Tarek !",
+  },
+];
+
+const cardVariants = {
+  hidden: { opacity: 0, y: 26 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease,
+      delayChildren: 0.18,
+      staggerChildren: 0.06,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 8 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease } },
+};
+
+const starVariants = {
+  hidden: { opacity: 0, scale: 0.4, rotate: -20 },
+  visible: { opacity: 1, scale: 1, rotate: 0, transition: { duration: 0.45, ease } },
+};
+
+function Stars({ count }: { count: number }) {
+  return (
+    <motion.ul
+      role="img"
+      aria-label={`${count} étoiles sur 5`}
+      variants={{
+        hidden: {},
+        visible: { transition: { staggerChildren: 0.07 } },
+      }}
+      className="flex gap-1"
+    >
+      {[1, 2, 3, 4, 5].map((n) => (
+        <motion.li key={n} variants={starVariants}>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill={n <= count ? "#F0B429" : "transparent"}
+            stroke={n <= count ? "#F0B429" : "#D1C8B0"}
+            strokeWidth="1.4"
+            strokeLinejoin="round"
+            aria-hidden
+          >
+            <path d="M12 2.5l2.9 6.5 7.1.7-5.4 4.7 1.7 7-6.3-3.7L5.7 21.4l1.7-7L2 9.7l7.1-.7Z" />
+          </svg>
+        </motion.li>
+      ))}
+    </motion.ul>
+  );
+}
+
+function AvisCard({ a }: { a: Avis }) {
+  const initial = a.nom.charAt(0).toUpperCase();
+  return (
+    <motion.article
+      variants={cardVariants}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-80px" }}
+      whileHover={{ y: -4 }}
+      transition={{ type: "spring", stiffness: 280, damping: 24 }}
+      className="group relative flex flex-col gap-5 rounded-3xl bg-white p-7 shadow-[0_2px_30px_rgba(10,26,63,0.05)] ring-1 ring-nuit/5 transition-shadow duration-300 hover:shadow-[0_18px_48px_rgba(10,26,63,0.10)] sm:p-8"
+    >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -right-2 -top-2 font-display text-7xl leading-none text-dore/15 transition-colors duration-300 group-hover:text-dore/25 sm:text-8xl"
+      >
+        “
+      </span>
+
+      <motion.header variants={itemVariants} className="flex items-center gap-4">
+        <div
+          aria-hidden
+          className="relative inline-flex h-12 w-12 flex-none items-center justify-center rounded-full bg-gradient-to-br from-dore/30 to-dore/10 font-display text-lg text-dore-700 ring-1 ring-dore/30"
+        >
+          {initial}
+        </div>
+        <div className="min-w-0 flex-1">
+          <h3 className="flex items-center gap-2 font-display text-base text-nuit">
+            <span>{a.nom}</span>
+            {a.flag && (
+              <span aria-hidden className="text-base">
+                {a.flag}
+              </span>
+            )}
+          </h3>
+          {a.date && (
+            <p className="mt-0.5 text-[11px] uppercase tracking-[0.18em] text-nuit/50">
+              {a.date}
+            </p>
+          )}
+        </div>
+      </motion.header>
+
+      {typeof a.stars === "number" && (
+        <motion.div variants={itemVariants}>
+          <Stars count={a.stars} />
+        </motion.div>
+      )}
+
+      <motion.p variants={itemVariants} className="relative text-[15px] leading-relaxed text-nuit/85 sm:text-base">
+        {a.texte}
+      </motion.p>
+    </motion.article>
+  );
+}
+
+export function Avis() {
+  return (
+    <section id="avis" className="relative bg-creme py-24 sm:py-32">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-dore/35 to-transparent"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-32 top-1/3 h-72 w-72 rounded-full bg-dore/10 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-32 bottom-1/4 h-72 w-72 rounded-full bg-nuit/5 blur-3xl"
+      />
+
+      <div className="container-prose relative">
+        <SectionHeading title="Avis" />
+
+        <div className="mx-auto mt-16 grid max-w-5xl gap-6 md:grid-cols-2 md:gap-8">
+          {avis.map((a) => (
+            <AvisCard key={a.nom} a={a} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
