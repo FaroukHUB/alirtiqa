@@ -7,9 +7,8 @@ import { cycles, niveaux } from "@/lib/niveaux";
 
 const cycleAccent: Record<(typeof cycles)[number], string> = {
   Initiation: "from-dore-300/40 to-dore-400/10",
-  Fondations: "from-dore-400/45 to-dore-500/15",
-  Consolidation: "from-dore-500/50 to-dore-600/20",
-  Maîtrise: "from-dore-600/55 to-dore-700/25",
+  Préparation: "from-dore-400/50 to-dore-500/15",
+  Approfondissement: "from-dore-600/55 to-dore-700/20",
 };
 
 export function Niveaux() {
