@@ -5,14 +5,14 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 
 const piliers = [
   {
-    titre: "Ajurrumiyya",
-    description:
-      "Le traité fondamental de grammaire arabe (نحو), étudié dans le monde musulman depuis le XIIIᵉ siècle. Base de toute compréhension structurelle de la langue.",
-  },
-  {
     titre: "Al-Furqan",
     description:
-      "Méthode progressive de lecture du Coran et d'apprentissage du vocabulaire coranique. Permet d'accéder rapidement aux textes authentiques.",
+      "La base de notre programme : méthode égyptienne progressive d'apprentissage de la langue arabe et de la lecture du Coran. Pose les fondations du vocabulaire et de la lecture authentique.",
+  },
+  {
+    titre: "Al-Ajurrumiyya",
+    description:
+      "Le traité fondamental de grammaire arabe (نحو), étudié dans le monde musulman depuis le XIIIᵉ siècle. Vient consolider la compréhension structurelle acquise avec Al-Furqan.",
   },
   {
     titre: "Pédagogie égyptienne",
