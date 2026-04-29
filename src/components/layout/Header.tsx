@@ -33,7 +33,7 @@ export function Header() {
   return (
     <>
       <header className="sticky top-0 z-40 border-b border-dore/15 bg-nuit/85 backdrop-blur supports-[backdrop-filter]:bg-nuit/70">
-        <div className="container-prose flex h-20 items-center justify-between">
+        <div className="container-prose flex h-24 items-center justify-between">
           <Logo size="md" tone="light" />
 
           <nav className="hidden items-center gap-8 md:flex">
