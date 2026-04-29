@@ -7,7 +7,7 @@ const piliers = [
   {
     titre: "Al-Furqan",
     description:
-      "La base de notre programme : méthode égyptienne progressive d'apprentissage de la langue arabe et de la lecture du Coran. Pose les fondations du vocabulaire et de la lecture authentique.",
+      "La base de notre programme : méthode égyptienne progressive d'apprentissage de la langue arabe et de la lecture du Coran et de la Sounnah. Pose les fondations du vocabulaire et de la lecture authentique.",
   },
   {
     titre: "Al-Ajurrumiyya",
@@ -33,8 +33,8 @@ export function Methode() {
       <div className="container-prose">
         <SectionHeading
           kicker="Notre méthode"
-          title={<>Une pédagogie éprouvée, transmise depuis des siècles</>}
-          description="Inspirée des grands instituts égyptiens, notre méthode allie rigueur grammaticale, immersion progressive et application directe à la lecture du Coran."
+          title={<>Une pédagogie éprouvée, qui a fait ses preuves</>}
+          description="Inspirée des grands instituts égyptiens, notre méthode allie rigueur grammaticale, immersion progressive et application directe à la lecture et la compréhension du Coran et de la Sounnah."
         />
 
         <div className="mt-16 grid gap-6 md:grid-cols-3">
