@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { sql } from "@/lib/db";
@@ -46,6 +47,8 @@ export async function PATCH(
     return NextResponse.json({ error: "Avis non trouvé" }, { status: 404 });
   }
 
+  revalidatePath("/avis");
+
   return NextResponse.json({ avis: rows[0] });
 }
 
@@ -65,6 +68,8 @@ export async function DELETE(
   if (rows.length === 0) {
     return NextResponse.json({ error: "Avis non trouvé" }, { status: 404 });
   }
+
+  revalidatePath("/avis");
 
   return NextResponse.json({ ok: true });
 }
