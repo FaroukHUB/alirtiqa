@@ -43,7 +43,7 @@ export default function InscriptionPage() {
         </div>
       </section>
 
-      <section className="bg-creme py-16 sm:py-20">
+      <section id="formulaire" className="scroll-mt-32 bg-creme py-16 sm:py-20">
         <div className="container-prose">
           <Suspense fallback={null}>
             <InscriptionForm />
