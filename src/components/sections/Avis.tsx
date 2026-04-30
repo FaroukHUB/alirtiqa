@@ -214,14 +214,14 @@ export function Avis() {
       <div className="relative mt-12 hidden md:block">
         <div
           ref={scrollerRef}
-          className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-[max(2rem,calc((100vw-1280px)/2+2rem))] py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          className="flex snap-x snap-mandatory gap-6 overflow-x-auto scroll-smooth px-8 py-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {avis.map((a) => (
             <div
               key={a.nom}
               data-avis-card
               className="flex-none snap-start"
-              style={{ width: "min(440px, 80vw)" }}
+              style={{ width: "calc((100vw - 4rem - 3rem) / 3)" }}
             >
               <AvisCard a={a} />
             </div>
