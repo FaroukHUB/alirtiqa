@@ -26,6 +26,18 @@ const avis: Avis[] = [
     texte:
       "Je suis ravi d'avoir rencontré Tarek et d'apprendre l'arabe avec lui. Tarek est un professeur très compétent qui a parfaitement compris mes besoins d'amélioration. Ses supports pédagogiques sont excellents et ses cours sont parfaitement organisés. J'ai particulièrement apprécié la richesse des informations qu'il partage et son incroyable patience. Un grand merci, Tarek !",
   },
+  {
+    nom: "Jibril",
+    stars: 5,
+    texte:
+      "Prof avec un excellent niveau d’arabe qui prend le temps pour expliquer et faire comprendre quand on lui pose des questions et désireux de faire progresser ses élèves. Il peut être dur quand le travail n’est pas fait ou qu’il n’y a pas d’effort fourni donc je recommande pour les élèves qui sont réellement prêt à faire des efforts dans l’apprentissage de la langue arabe",
+  },
+  {
+    nom: "Faycal",
+    stars: 5,
+    texte:
+      "Salam aleykoum, je tiens à remercier Tarek pour son professionnalisme, c’est un prof très compétent et très rigoureux sur l’apprentissage de votre arabe. Je recommande fortement à tous ceux qui veulent apprendre la langue arabe.",
+  },
 ];
 
 const cardVariants = {
