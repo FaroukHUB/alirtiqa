@@ -107,57 +107,100 @@ export function Programmes() {
         />
 
         <div className="mt-16 grid gap-6 md:grid-cols-3">
-          {formules.map((f) => (
-            <motion.article
-              key={f.slug}
-              variants={cardVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-80px" }}
-              className="relative flex flex-col rounded-2xl border border-nuit/10 bg-white p-8 shadow-[0_1px_0_rgba(10,26,63,0.04)] transition-shadow hover:shadow-[0_8px_30px_rgba(10,26,63,0.08)]"
-            >
-              {f.badge && (
-                <span className="absolute -top-3 left-8 inline-flex items-center rounded-full bg-dore px-3 py-1 font-display text-[10px] uppercase tracking-[0.25em] text-nuit">
-                  {f.badge}
-                </span>
-              )}
+          {formules.map((f) => {
+            const uniteSansEuro = f.unite.replace(/^€\s*/, "");
+            return (
+              <motion.article
+                key={f.slug}
+                variants={cardVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-80px" }}
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-nuit/10 bg-white p-8 pt-10 shadow-[0_1px_0_rgba(10,26,63,0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:border-dore/40 hover:shadow-[0_18px_48px_rgba(10,26,63,0.10)]"
+              >
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-dore/50 to-transparent"
+                />
 
-              <motion.h3 variants={itemVariants} className="font-display text-xl text-nuit">
-                {f.titre}
-              </motion.h3>
+                {f.badge && (
+                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center rounded-full bg-dore px-3 py-1 font-display text-[10px] uppercase tracking-[0.25em] text-nuit shadow-[0_4px_14px_rgba(201,169,97,0.35)]">
+                    {f.badge}
+                  </span>
+                )}
 
-              <motion.div variants={itemVariants} className="mt-4">
-                <PersonsIcon count={formuleCount[f.slug]} />
-              </motion.div>
+                <div className="flex flex-col items-center text-center">
+                  <motion.div variants={itemVariants}>
+                    <PersonsIcon count={formuleCount[f.slug]} />
+                  </motion.div>
 
-              <motion.p variants={itemVariants} className="mt-3 text-sm text-nuit/65">
-                {f.promesse}
-              </motion.p>
+                  <motion.h3 variants={itemVariants} className="mt-4 font-display text-2xl text-nuit">
+                    {f.titre}
+                  </motion.h3>
 
-              <motion.ul variants={itemVariants} className="mt-6 space-y-3 text-sm text-nuit/75">
-                {f.pour.map((item) => (
-                  <li key={item} className="flex gap-3">
-                    <span aria-hidden className="mt-1.5 inline-block h-1 w-1 flex-none rounded-full bg-dore" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </motion.ul>
+                  <motion.p
+                    variants={itemVariants}
+                    className="mt-4 font-display text-[11px] font-semibold uppercase tracking-[0.22em] text-nuit"
+                  >
+                    {f.promesse}
+                  </motion.p>
 
-              <motion.div variants={itemVariants} className="mt-8 flex items-baseline gap-2">
-                <span className="font-display text-4xl text-nuit">{f.prix}</span>
-                <span className="text-sm text-nuit/60">{f.unite}</span>
-              </motion.div>
+                  <motion.span
+                    aria-hidden
+                    variants={itemVariants}
+                    className="mt-4 block h-px w-12 bg-dore/50"
+                  />
+                </div>
 
-              <motion.div variants={itemVariants} className="mt-6">
-                <ButtonLink
-                  href={`/inscription?formule=${f.slug}#formulaire`}
-                  className="w-full"
+                <motion.ul variants={itemVariants} className="mt-7 space-y-3 text-sm text-nuit/80">
+                  {f.pour.map((item) => (
+                    <li key={item} className="flex gap-3">
+                      <svg
+                        aria-hidden
+                        viewBox="0 0 20 20"
+                        className="mt-0.5 h-4 w-4 flex-none text-dore-600"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="M4 10.5l3.5 3.5L16 6" />
+                      </svg>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </motion.ul>
+
+                <motion.div
+                  variants={itemVariants}
+                  className="relative mt-8 overflow-hidden rounded-xl border border-dore/30 bg-gradient-to-br from-dore/10 via-dore/5 to-transparent p-5 text-center"
                 >
-                  Choisir cette formule
-                </ButtonLink>
-              </motion.div>
-            </motion.article>
-          ))}
+                  <div
+                    aria-hidden
+                    className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-dore/60 to-transparent"
+                  />
+                  <p className="font-display text-[10px] uppercase tracking-[0.3em] text-nuit/55">
+                    Tarif
+                  </p>
+                  <p className="mt-2 font-display leading-none text-nuit">
+                    <span className="text-5xl">{f.prix}</span>
+                    <span className="ml-1 align-top text-2xl text-dore-700">€</span>
+                  </p>
+                  <p className="mt-2 text-xs text-nuit/60">{uniteSansEuro}</p>
+                </motion.div>
+
+                <motion.div variants={itemVariants} className="mt-6">
+                  <ButtonLink
+                    href={`/inscription?formule=${f.slug}#formulaire`}
+                    className="w-full"
+                  >
+                    Choisir cette formule
+                  </ButtonLink>
+                </motion.div>
+              </motion.article>
+            );
+          })}
         </div>
 
         <p className="mt-10 text-center text-sm text-nuit/55">
