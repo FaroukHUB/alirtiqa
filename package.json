@@ -12,6 +12,7 @@
     "db:seed-admin": "tsx scripts/seed-admin.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.91.1",
     "@neondatabase/serverless": "^1.1.0",
     "bcryptjs": "^3.0.3",
     "framer-motion": "^11.11.17",
