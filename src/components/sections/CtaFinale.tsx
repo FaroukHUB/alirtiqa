@@ -11,7 +11,7 @@ export function CtaFinale() {
     <section className="relative isolate overflow-hidden bg-nuit text-creme">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-arabesque bg-[length:600px] opacity-[0.05]"
+        className="pointer-events-none absolute inset-0 bg-zellige bg-[length:160px] opacity-[0.08]"
       />
       <div
         aria-hidden
@@ -34,7 +34,7 @@ export function CtaFinale() {
             Commencer aujourd&apos;hui
           </p>
           <h2 className="mt-4 text-balance font-display text-3xl leading-tight sm:text-4xl md:text-5xl">
-            Faites le premier pas vers la langue du Coran
+            L&apos;arabe est la clé pour comprendre le Coran et la Sounnah.
           </h2>
           <p className="mt-5 max-w-xl text-balance text-creme/75">
             Inscrivez-vous en quelques minutes ou écrivez-nous directement sur
@@ -59,7 +59,7 @@ export function CtaFinale() {
           </div>
 
           <p className="mt-8 text-xs text-creme/55">
-            Sans engagement · Réponse sous 24 h · Cours d&apos;essai possible
+            Sans engagement · Réponse sous 24 h
           </p>
         </motion.div>
       </div>

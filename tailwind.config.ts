@@ -47,6 +47,7 @@ const config: Config = {
       },
       backgroundImage: {
         "arabesque": "url('/patterns/arabesque.svg')",
+        "zellige": "url('/patterns/zellige.svg')",
       },
       transitionDuration: {
         DEFAULT: "300ms",
