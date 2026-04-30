@@ -2,13 +2,17 @@ import Anthropic from "@anthropic-ai/sdk";
 import fs from "fs";
 import path from "path";
 
-if (!process.env.ANTHROPIC_API_KEY) {
-  throw new Error("ANTHROPIC_API_KEY is not set in environment variables");
-}
+let _anthropic: Anthropic | null = null;
 
-export const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
+export function getAnthropic(): Anthropic {
+  if (_anthropic) return _anthropic;
+  const apiKey = process.env.ANTHROPIC_API_KEY;
+  if (!apiKey) {
+    throw new Error("ANTHROPIC_API_KEY is not set in environment variables");
+  }
+  _anthropic = new Anthropic({ apiKey });
+  return _anthropic;
+}
 
 let cachedKb: string | null = null;
 

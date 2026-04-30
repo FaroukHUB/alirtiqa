@@ -2,7 +2,7 @@ import { NextRequest } from "next/server";
 import { z } from "zod";
 import Anthropic from "@anthropic-ai/sdk";
 import {
-  anthropic,
+  getAnthropic,
   buildSystemPrompt,
   CHATBOT_MODEL,
   CHATBOT_MAX_TOKENS,
@@ -77,7 +77,7 @@ export async function POST(req: NextRequest) {
       const encoder = new TextEncoder();
 
       try {
-        const apiStream = anthropic.messages.stream({
+        const apiStream = getAnthropic().messages.stream({
           model: CHATBOT_MODEL,
           max_tokens: CHATBOT_MAX_TOKENS,
           system: buildSystemPrompt(),

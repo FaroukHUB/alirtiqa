@@ -5,14 +5,19 @@ import { AvisInner } from "./AvisInner";
 import type { PublicAvis } from "@/components/avis/AvisCard";
 
 async function getLatestApproved(limit: number): Promise<PublicAvis[]> {
-  const rows = (await sql`
-    SELECT id, nom, note, texte
-    FROM avis
-    WHERE statut = 'approved'
-    ORDER BY moderated_at DESC NULLS LAST, created_at DESC
-    LIMIT ${limit}
-  `) as PublicAvis[];
-  return rows;
+  try {
+    const rows = (await sql`
+      SELECT id, nom, note, texte
+      FROM avis
+      WHERE statut = 'approved'
+      ORDER BY moderated_at DESC NULLS LAST, created_at DESC
+      LIMIT ${limit}
+    `) as PublicAvis[];
+    return rows;
+  } catch (err) {
+    console.error("getLatestApproved failed", err);
+    return [];
+  }
 }
 
 export async function Avis() {

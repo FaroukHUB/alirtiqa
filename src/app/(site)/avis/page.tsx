@@ -10,13 +10,18 @@ export const metadata: Metadata = {
 };
 
 async function getApprovedAvis(): Promise<PublicAvis[]> {
-  const rows = (await sql`
-    SELECT id, nom, note, texte
-    FROM avis
-    WHERE statut = 'approved'
-    ORDER BY moderated_at DESC NULLS LAST, created_at DESC
-  `) as PublicAvis[];
-  return rows;
+  try {
+    const rows = (await sql`
+      SELECT id, nom, note, texte
+      FROM avis
+      WHERE statut = 'approved'
+      ORDER BY moderated_at DESC NULLS LAST, created_at DESC
+    `) as PublicAvis[];
+    return rows;
+  } catch (err) {
+    console.error("getApprovedAvis failed", err);
+    return [];
+  }
 }
 
 export default async function AvisPage() {
