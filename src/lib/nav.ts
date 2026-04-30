@@ -1,9 +1,9 @@
 export const mainNav = [
   { href: "/a-propos", label: "À propos" },
-  { href: "/methode-egyptienne", label: "Méthode" },
   { href: "/programme", label: "Programme" },
   { href: "/tarifs", label: "Tarifs" },
   { href: "/test-de-niveau", label: "Test de niveau" },
+  { href: "/avis", label: "Avis" },
   { href: "/contact", label: "Contact" },
 ] as const;
 
