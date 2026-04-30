@@ -247,17 +247,42 @@ export function Tarifs() {
           <h3 className="font-display text-xs uppercase tracking-[0.4em] text-dore">
             Modalités
           </h3>
-          <dl className="mt-8 grid gap-x-10 gap-y-6 md:grid-cols-3">
-            {modalites.map((m) => (
-              <div key={m.label} className="flex flex-col gap-1.5">
-                <dt className="text-xs uppercase tracking-[0.2em] text-creme/55">
-                  {m.label}
-                </dt>
-                <dd className="text-sm leading-relaxed text-creme/90">
-                  {m.value}
-                </dd>
-              </div>
-            ))}
+          <dl className="mt-8 grid gap-x-10 gap-y-2 md:grid-cols-3">
+            {modalites.map((m, i) => {
+              const col = i % 3;
+              const row = Math.floor(i / 3);
+              const diag = col + row;
+              const delay = diag * 0.12;
+              return (
+                <motion.div
+                  key={m.label}
+                  initial={{ opacity: 0, y: 14 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-60px" }}
+                  transition={{ duration: 0.5, delay, ease: [0.16, 1, 0.3, 1] }}
+                  className="group relative -mx-3 flex flex-col gap-2 rounded-lg px-3 py-3 transition-colors duration-300 hover:bg-creme/[0.04]"
+                >
+                  <dt className="text-xs uppercase tracking-[0.2em] text-creme/55 transition-colors duration-300 group-hover:text-dore">
+                    {m.label}
+                  </dt>
+                  <motion.span
+                    aria-hidden
+                    initial={{ scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true, margin: "-60px" }}
+                    transition={{
+                      duration: 0.6,
+                      delay: delay + 0.25,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="block h-px w-10 origin-left bg-dore/60 transition-[width,background-color] duration-300 group-hover:w-16 group-hover:bg-dore"
+                  />
+                  <dd className="text-sm leading-relaxed text-creme/90">
+                    {m.value}
+                  </dd>
+                </motion.div>
+              );
+            })}
           </dl>
         </motion.div>
       </div>
