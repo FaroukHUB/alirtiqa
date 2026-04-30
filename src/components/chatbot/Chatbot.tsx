@@ -150,22 +150,25 @@ export function Chatbot() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0 }}
               transition={{ duration: 0.2 }}
-              width="26"
-              height="26"
-              viewBox="0 0 24 24"
+              width="28"
+              height="28"
+              viewBox="0 0 32 32"
               fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               aria-hidden
             >
-              <path
-                d="M21 12a8 8 0 01-8 8 8.4 8.4 0 01-3.5-.8L4 21l1.4-4.7A8 8 0 1121 12z"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <circle cx="9" cy="12" r="1" fill="currentColor" />
-              <circle cx="13" cy="12" r="1" fill="currentColor" />
-              <circle cx="17" cy="12" r="1" fill="currentColor" />
+              <path d="M16 9c-2-1.5-5-2.5-9-2.5v17c4 0 7 1 9 2.5" />
+              <path d="M16 9c2-1.5 5-2.5 9-2.5v17c-4 0-7 1-9 2.5" />
+              <path d="M16 9v17" />
+              <path d="M9 11.5h4" opacity="0.7" />
+              <path d="M9 14.5h4" opacity="0.7" />
+              <path d="M9 17.5h4" opacity="0.7" />
+              <path d="M19 11.5h4" opacity="0.7" />
+              <path d="M19 14.5h4" opacity="0.7" />
+              <path d="M19 17.5h4" opacity="0.7" />
             </motion.svg>
           )}
         </AnimatePresence>
