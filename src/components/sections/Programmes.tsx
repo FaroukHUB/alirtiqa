@@ -116,7 +116,7 @@ export function Programmes() {
                 initial="hidden"
                 whileInView="visible"
                 viewport={{ once: true, margin: "-80px" }}
-                className="group relative flex flex-col overflow-hidden rounded-2xl border border-nuit/10 bg-white p-8 pt-10 shadow-[0_1px_0_rgba(10,26,63,0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:border-dore/40 hover:shadow-[0_18px_48px_rgba(10,26,63,0.10)]"
+                className="group relative flex flex-col overflow-hidden rounded-2xl border border-nuit/10 bg-white p-8 pt-14 shadow-[0_1px_0_rgba(10,26,63,0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:border-dore/40 hover:shadow-[0_18px_48px_rgba(10,26,63,0.10)]"
               >
                 <div
                   aria-hidden
@@ -124,7 +124,7 @@ export function Programmes() {
                 />
 
                 {f.badge && (
-                  <span className="absolute -top-3 left-1/2 -translate-x-1/2 inline-flex items-center rounded-full bg-dore px-3 py-1 font-display text-[10px] uppercase tracking-[0.25em] text-nuit shadow-[0_4px_14px_rgba(201,169,97,0.35)]">
+                  <span className="absolute top-4 left-1/2 -translate-x-1/2 inline-flex items-center rounded-full bg-dore px-3 py-1 font-display text-[10px] uppercase tracking-[0.25em] text-nuit shadow-[0_4px_14px_rgba(201,169,97,0.35)]">
                     {f.badge}
                   </span>
                 )}
