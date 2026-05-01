@@ -137,7 +137,7 @@ function NiveauCard({
         <h3 className="mt-3 font-display text-lg text-nuit">{niveau.titre}</h3>
 
         <p className="mt-2 flex-1 text-sm leading-relaxed text-nuit/70">
-          {niveau.resume}
+          {niveau.contenu}
         </p>
       </div>
     </li>
