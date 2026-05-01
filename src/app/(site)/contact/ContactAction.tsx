@@ -79,7 +79,7 @@ function ContactModal({ onClose }: { onClose: () => void }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-nuit/40 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-nuit/60 p-4"
       onClick={onClose}
       role="dialog"
       aria-modal="true"
