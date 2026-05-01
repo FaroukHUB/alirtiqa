@@ -2,6 +2,7 @@ import Link from "next/link";
 import { sql } from "@/lib/db";
 import type { Question, QuestionStatut, QuestionCategorie } from "@/lib/db";
 import { QuestionsClient } from "./QuestionsClient";
+import { AideContent } from "./AideContent";
 
 const CATEGORIES: QuestionCategorie[] = [
   "vocabulaire",
@@ -50,8 +51,15 @@ async function getCounts() {
 export default async function QuestionsAdminPage({
   searchParams,
 }: {
-  searchParams: { niveau?: string; categorie?: string; statut?: string };
+  searchParams: {
+    niveau?: string;
+    categorie?: string;
+    statut?: string;
+    vue?: string;
+  };
 }) {
+  const vue: "liste" | "aide" = searchParams.vue === "aide" ? "aide" : "liste";
+
   const niveau =
     searchParams.niveau && /^\d+$/.test(searchParams.niveau)
       ? Math.min(15, Math.max(1, parseInt(searchParams.niveau, 10)))
@@ -68,7 +76,9 @@ export default async function QuestionsAdminPage({
       : null;
 
   const [questions, counts] = await Promise.all([
-    getQuestions({ niveau, categorie, statut }),
+    vue === "liste"
+      ? getQuestions({ niveau, categorie, statut })
+      : Promise.resolve([] as Question[]),
     getCounts(),
   ]);
 
@@ -89,34 +99,78 @@ export default async function QuestionsAdminPage({
           </p>
         </header>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          <StatusCard
-            label="Brouillons à valider"
-            value={counts.draft}
-            href="/admin/questions?statut=draft"
-            highlight={counts.draft > 0}
-          />
-          <StatusCard
-            label="Publiées"
-            value={counts.published}
-            href="/admin/questions?statut=published"
-          />
-          <StatusCard
-            label="Archivées"
-            value={counts.archived}
-            href="/admin/questions?statut=archived"
-          />
-        </div>
+        <nav className="mt-7 flex gap-1 border-b border-nuit/10">
+          <TabLink href="/admin/questions" active={vue === "liste"}>
+            📋 Liste des questions
+          </TabLink>
+          <TabLink href="/admin/questions?vue=aide" active={vue === "aide"}>
+            📖 Comment ça marche
+          </TabLink>
+        </nav>
 
-        <Filters
-          niveau={niveau}
-          categorie={categorie}
-          statut={statut}
-        />
+        {vue === "aide" ? (
+          <AideContent />
+        ) : (
+          <>
+            <div className="mt-6 grid gap-3 sm:grid-cols-3">
+              <StatusCard
+                label="Brouillons à valider"
+                value={counts.draft}
+                href="/admin/questions?statut=draft"
+                highlight={counts.draft > 0}
+              />
+              <StatusCard
+                label="Publiées"
+                value={counts.published}
+                href="/admin/questions?statut=published"
+              />
+              <StatusCard
+                label="Archivées"
+                value={counts.archived}
+                href="/admin/questions?statut=archived"
+              />
+            </div>
 
-        <QuestionsClient questions={questions} />
+            <Filters
+              niveau={niveau}
+              categorie={categorie}
+              statut={statut}
+            />
+
+            <QuestionsClient questions={questions} />
+          </>
+        )}
       </div>
     </div>
+  );
+}
+
+function TabLink({
+  href,
+  active,
+  children,
+}: {
+  href: string;
+  active: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link
+      href={href}
+      className={`relative inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium transition-colors ${
+        active
+          ? "text-nuit"
+          : "text-nuit/55 hover:text-nuit"
+      }`}
+    >
+      {children}
+      {active && (
+        <span
+          aria-hidden
+          className="absolute inset-x-3 -bottom-px h-0.5 bg-dore"
+        />
+      )}
+    </Link>
   );
 }
 

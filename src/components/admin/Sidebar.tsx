@@ -64,7 +64,7 @@ const items: Item[] = [
   {
     href: "/admin/tests",
     label: "Résultats des tests",
-    enabled: false,
+    enabled: true,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
         <path d="M9 11l3 3 8-8" />
