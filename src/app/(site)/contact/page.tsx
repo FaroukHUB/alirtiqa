@@ -21,7 +21,7 @@ type Channel = {
   cta: string;
   action:
     | { kind: "external"; href: string }
-    | { kind: "copy"; copyValue: string };
+    | { kind: "modal" };
   icon: React.ReactNode;
 };
 
@@ -51,8 +51,8 @@ const channels: Channel[] = [
     label: "Email",
     description: "Pour les demandes plus longues ou les pièces jointes.",
     value: site.contact.email,
-    action: { kind: "copy", copyValue: site.contact.email },
-    cta: "Copier l'adresse",
+    action: { kind: "modal" },
+    cta: "Envoyer un email",
     icon: (
       <svg
         viewBox="0 0 24 24"
@@ -139,12 +139,7 @@ export default function ContactPage() {
                     label={c.cta}
                   />
                 ) : (
-                  <ContactAction
-                    kind="copy"
-                    value={c.action.copyValue}
-                    label={c.cta}
-                    labelDone="Adresse copiée !"
-                  />
+                  <ContactAction kind="modal" label={c.cta} />
                 )}
               </li>
             ))}

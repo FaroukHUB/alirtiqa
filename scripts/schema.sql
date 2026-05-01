@@ -148,3 +148,19 @@ CREATE TABLE IF NOT EXISTS pdf_downloads (
 CREATE INDEX IF NOT EXISTS idx_pdf_downloads_pdf ON pdf_downloads(pdf_id);
 CREATE INDEX IF NOT EXISTS idx_pdf_downloads_email ON pdf_downloads(email);
 CREATE INDEX IF NOT EXISTS idx_pdf_downloads_created_at ON pdf_downloads(created_at DESC);
+
+-- Messages de contact (formulaire de la page /contact)
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  prenom TEXT NOT NULL,
+  email TEXT NOT NULL,
+  sujet TEXT,
+  message TEXT NOT NULL,
+  lu BOOLEAN NOT NULL DEFAULT FALSE,
+  ip TEXT,
+  user_agent TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_contact_messages_lu ON contact_messages(lu);
+CREATE INDEX IF NOT EXISTS idx_contact_messages_created_at ON contact_messages(created_at DESC);

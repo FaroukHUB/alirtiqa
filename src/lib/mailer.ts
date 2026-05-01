@@ -2,6 +2,7 @@ import nodemailer, { type Transporter } from "nodemailer";
 import { site } from "@/lib/site";
 import { niveaux } from "@/lib/niveaux";
 import type {
+  ContactMessage,
   Inscription,
   InscriptionFormule,
   TestAttempt,
@@ -215,6 +216,52 @@ export async function sendTestResultNotif(
     return true;
   } catch (err) {
     console.error("[mailer] échec envoi mail test:", err);
+    return false;
+  }
+}
+
+export async function sendContactMessage(
+  m: ContactMessage,
+): Promise<boolean> {
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.warn("[mailer] SMTP non configuré, message contact non envoyé");
+    return false;
+  }
+  const adminEmail = process.env.ADMIN_EMAIL ?? site.contact.email;
+  const from = process.env.SMTP_FROM ?? process.env.SMTP_USER!;
+  const subject = m.sujet
+    ? `Contact site — ${m.sujet}`
+    : `Contact site — message de ${m.prenom}`;
+
+  const body = [
+    `Nouveau message reçu le ${fmtDate(m.created_at)}.`,
+    "",
+    "— Expéditeur —",
+    `Prénom : ${m.prenom}`,
+    `Email : ${m.email}`,
+    m.sujet ? `Sujet : ${m.sujet}` : null,
+    "",
+    "— Message —",
+    m.message,
+    "",
+    "—",
+    "Pour répondre directement, utilise la fonction Reply de ton client mail (l'email de l'expéditeur est en Reply-To).",
+  ]
+    .filter((l) => l !== null)
+    .join("\n");
+
+  try {
+    await transporter.sendMail({
+      from,
+      to: adminEmail,
+      replyTo: m.email,
+      subject,
+      text: body,
+    });
+    return true;
+  } catch (err) {
+    console.error("[mailer] échec envoi message contact:", err);
     return false;
   }
 }

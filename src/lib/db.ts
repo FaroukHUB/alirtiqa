@@ -104,6 +104,18 @@ export type PdfDownload = {
   created_at: string;
 };
 
+export type ContactMessage = {
+  id: string;
+  prenom: string;
+  email: string;
+  sujet: string | null;
+  message: string;
+  lu: boolean;
+  ip: string | null;
+  user_agent: string | null;
+  created_at: string;
+};
+
 export type TestAttempt = {
   id: string;
   current_level: number;
