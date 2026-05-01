@@ -41,3 +41,7 @@ next-env.d.ts
 
 # Cours PDFs (locaux uniquement, jamais poussés)
 scripts/cours-pdfs/*.pdf
+scripts/cours-pdfs/*.txt
+
+# Claude Code local state
+.claude/scheduled_tasks.lock

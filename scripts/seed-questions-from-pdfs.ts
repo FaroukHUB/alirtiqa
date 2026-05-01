@@ -1,8 +1,9 @@
 import { Pool } from "@neondatabase/serverless";
 import Anthropic from "@anthropic-ai/sdk";
 import * as dotenv from "dotenv";
-import { readFileSync, existsSync } from "fs";
+import { readFileSync, existsSync, writeFileSync } from "fs";
 import { join } from "path";
+import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
 
 dotenv.config({ path: ".env.local" });
 
@@ -96,23 +97,50 @@ type GeneratedQuestion = {
   explication: string;
 };
 
-function loadPdf(niveau: number): { pdfBase64: string; sizeKb: number } | null {
-  const path = join(PDFS_DIR, `niveau-${niveau}.pdf`);
-  if (!existsSync(path)) return null;
-  const buf = readFileSync(path);
-  return {
-    pdfBase64: buf.toString("base64"),
-    sizeKb: Math.round(buf.length / 1024),
-  };
+async function loadPdfText(
+  niveau: number,
+): Promise<{ text: string; chars: number; pages: number } | null> {
+  const pdfPath = join(PDFS_DIR, `niveau-${niveau}.pdf`);
+  if (!existsSync(pdfPath)) return null;
+
+  const cachePath = join(PDFS_DIR, `niveau-${niveau}.txt`);
+  if (existsSync(cachePath)) {
+    const cached = readFileSync(cachePath, "utf-8");
+    const pageCount = (cached.match(/\f/g)?.length ?? 0) + 1;
+    return { text: cached, chars: cached.length, pages: pageCount };
+  }
+
+  const buf = readFileSync(pdfPath);
+  const data = new Uint8Array(buf);
+  const doc = await getDocument({ data, useSystemFonts: true }).promise;
+  const pageTexts: string[] = [];
+  for (let i = 1; i <= doc.numPages; i++) {
+    const page = await doc.getPage(i);
+    const content = await page.getTextContent();
+    const text = content.items
+      .map((it) => ("str" in it ? it.str : ""))
+      .join(" ")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (text.length > 0) pageTexts.push(text);
+  }
+  const fullText = pageTexts.join("\n\f\n");
+  writeFileSync(cachePath, fullText, "utf-8");
+  return { text: fullText, chars: fullText.length, pages: doc.numPages };
 }
 
 function buildPrompt(
   niveau: number,
   cell: Cell,
+  courseText: string,
 ): string {
   return `Tu es un professeur d'arabe expert formé à la méthode égyptienne classique. Tu prépares des questions pour un test de niveau adaptatif destiné à des francophones musulmans.
 
-LE PDF JOINT EST LE COURS OFFICIEL DU NIVEAU ${niveau} sur 15 (programme Al-Furqan).
+CI-DESSOUS LE TEXTE EXTRAIT DU COURS OFFICIEL DU NIVEAU ${niveau} sur 15 (programme Al-Furqan). Le texte arabe peut comporter de petites imperfections d'extraction (diacritiques mal placées, ligatures cassées) — appuie-toi sur le sens et restaure une voyellation correcte dans tes questions.
+
+<cours-niveau-${niveau}>
+${courseText}
+</cours-niveau-${niveau}>
 
 CATÉGORIE À GÉNÉRER : ${cell.categorie}
 ${CATEGORIE_DESC[cell.categorie]}
@@ -120,7 +148,7 @@ ${CATEGORIE_DESC[cell.categorie]}
 NOMBRE À GÉNÉRER : ${cell.count} question${cell.count > 1 ? "s" : ""}
 
 CONSIGNES STRICTES :
-1. Base-toi STRICTEMENT sur le contenu du PDF fourni. Vocabulaire, tournures, exemples, règles → tout doit venir du cours, pas de ta culture générale arabe.
+1. Base-toi STRICTEMENT sur le contenu du cours ci-dessus. Vocabulaire, tournures, exemples, règles → tout doit venir du cours, pas de ta culture générale arabe.
 2. Adapte STRICTEMENT la difficulté au niveau ${niveau}. Ne propose JAMAIS de notion d'un niveau supérieur.
 3. Mélange les types : si tu génères 2 questions ou plus, fais 1 Vrai/Faux parmi elles, le reste en QCM.
 4. Pour les QCM : 4 choix exactement, 1 seule bonne réponse. Distracteurs plausibles (pas absurdes).
@@ -189,30 +217,12 @@ async function clearOldIaQuestions(pool: Pool): Promise<{
   return { archived, deleted: deletedRes.rowCount ?? 0 };
 }
 
-async function callClaude(
+async function generateForCell(
   client: Anthropic,
   niveau: number,
+  courseText: string,
   cell: Cell,
-  pdfBase64: string | null,
 ): Promise<GeneratedQuestion[]> {
-  const userContent: Anthropic.MessageParam["content"] = [];
-
-  if (pdfBase64) {
-    userContent.push({
-      type: "document",
-      source: {
-        type: "base64",
-        media_type: "application/pdf",
-        data: pdfBase64,
-      },
-      cache_control: { type: "ephemeral" },
-    });
-  }
-  userContent.push({
-    type: "text",
-    text: buildPrompt(niveau, cell),
-  });
-
   const response = await client.messages.create({
     model: "claude-haiku-4-5",
     max_tokens: 4096,
@@ -224,7 +234,18 @@ async function callClaude(
       },
     ],
     tool_choice: { type: "tool", name: "submit_questions" },
-    messages: [{ role: "user", content: userContent }],
+    messages: [
+      {
+        role: "user",
+        content: [
+          {
+            type: "text",
+            text: buildPrompt(niveau, cell, courseText),
+            cache_control: { type: "ephemeral" },
+          },
+        ],
+      },
+    ],
   });
 
   const toolUse = response.content.find((b) => b.type === "tool_use");
@@ -238,27 +259,6 @@ async function callClaude(
   return input.questions;
 }
 
-async function generateForCell(
-  client: Anthropic,
-  niveau: number,
-  pdfBase64: string,
-  cell: Cell,
-): Promise<{ questions: GeneratedQuestion[]; usedPdf: boolean }> {
-  // Tentative 1 : avec le PDF en contexte
-  try {
-    const questions = await callClaude(client, niveau, cell, pdfBase64);
-    return { questions, usedPdf: true };
-  } catch (err) {
-    const msg = err instanceof Error ? err.message : String(err);
-    // Fallback texte si PDF trop gros (>200k tokens) ou >100 pages
-    if (msg.includes("prompt is too long") || msg.includes("PDF pages")) {
-      const questions = await callClaude(client, niveau, cell, null);
-      return { questions, usedPdf: false };
-    }
-    throw err;
-  }
-}
-
 async function main() {
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL manquant");
   if (!process.env.ANTHROPIC_API_KEY)
@@ -268,15 +268,21 @@ async function main() {
   const client = new Anthropic();
 
   try {
-    // Inventaire des PDFs disponibles
-    const availableLevels = Object.keys(GRID)
-      .map(Number)
-      .filter((n) => loadPdf(n) !== null)
+    // Inventaire des PDFs disponibles + extraction du texte (avec cache .txt)
+    console.log("\n→ Extraction du texte des PDFs (cache si .txt existe déjà)…");
+    const allLevels = Object.keys(GRID).map(Number);
+    const courseTexts: Record<number, { text: string; chars: number; pages: number }> = {};
+    for (const n of allLevels) {
+      const r = await loadPdfText(n);
+      if (r) {
+        courseTexts[n] = r;
+        console.log(`  niveau-${n}.pdf : ${r.pages} pages → ${r.chars.toLocaleString()} chars`);
+      }
+    }
+    const availableLevels = allLevels
+      .filter((n) => courseTexts[n])
       .sort((a, b) => a - b);
-
-    const missingLevels = Object.keys(GRID)
-      .map(Number)
-      .filter((n) => !availableLevels.includes(n));
+    const missingLevels = allLevels.filter((n) => !courseTexts[n]);
 
     console.log(
       `\n→ ${availableLevels.length} PDF(s) trouvé(s) dans scripts/cours-pdfs/`,
@@ -311,10 +317,10 @@ async function main() {
     const failures: { niveau: number; cell: Cell; error: string }[] = [];
 
     for (const niveau of availableLevels) {
-      const pdf = loadPdf(niveau)!;
+      const course = courseTexts[niveau];
       const cells = GRID[niveau];
       console.log(
-        `\n━ Niveau ${niveau} — PDF ${pdf.sizeKb} KB — ${cells.length} catégorie(s) à générer`,
+        `\n━ Niveau ${niveau} — ${course.pages} pages, ${course.chars.toLocaleString()} chars — ${cells.length} catégorie(s) à générer`,
       );
 
       for (let i = 0; i < cells.length; i++) {
@@ -343,10 +349,10 @@ async function main() {
         process.stdout.write(`${tag.padEnd(50)} `);
 
         try {
-          const { questions, usedPdf } = await generateForCell(
+          const questions = await generateForCell(
             client,
             niveau,
-            pdf.pdfBase64,
+            course.text,
             { ...cell, count: need },
           );
           let inserted = 0;
@@ -374,7 +380,7 @@ async function main() {
             inserted++;
             totalInserted++;
           }
-          console.log(`✓ ${inserted}/${need}${usedPdf ? "" : " (sans PDF)"}`);
+          console.log(`✓ ${inserted}/${need}`);
         } catch (err) {
           const msg = err instanceof Error ? err.message : String(err);
           console.log(`✗ ${msg}`);
