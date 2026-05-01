@@ -43,6 +43,33 @@ export type InscriptionStatut =
 
 export type InscriptionFormule = "particulier" | "duo" | "groupe";
 
+export type QuestionType = "qcm" | "vf";
+export type QuestionCategorie =
+  | "vocabulaire"
+  | "grammaire"
+  | "sarf"
+  | "lecture"
+  | "comprehension"
+  | "coran";
+export type QuestionStatut = "draft" | "published" | "archived";
+export type QuestionSource = "manuel" | "ia_seed" | "ia_admin";
+
+export type Question = {
+  id: string;
+  type: QuestionType;
+  enonce: string;
+  arabe: string | null;
+  choix: string[];
+  bonne_reponse: number;
+  explication: string | null;
+  niveau: number;
+  categorie: QuestionCategorie;
+  statut: QuestionStatut;
+  source: QuestionSource;
+  created_at: string;
+  updated_at: string;
+};
+
 export type Inscription = {
   id: string;
   prenom: string;

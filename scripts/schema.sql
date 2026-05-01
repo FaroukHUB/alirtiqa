@@ -53,3 +53,27 @@ CREATE TABLE IF NOT EXISTS inscriptions (
 
 CREATE INDEX IF NOT EXISTS idx_inscriptions_statut ON inscriptions(statut);
 CREATE INDEX IF NOT EXISTS idx_inscriptions_created_at ON inscriptions(created_at DESC);
+
+-- Questions du test de niveau (pool, modéré par l'admin avant publication)
+CREATE TABLE IF NOT EXISTS questions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  type TEXT NOT NULL CHECK (type IN ('qcm', 'vf')),
+  enonce TEXT NOT NULL,
+  arabe TEXT,
+  choix JSONB NOT NULL,
+  bonne_reponse INT NOT NULL,
+  explication TEXT,
+  niveau INT NOT NULL CHECK (niveau BETWEEN 1 AND 15),
+  categorie TEXT NOT NULL
+    CHECK (categorie IN ('vocabulaire', 'grammaire', 'sarf', 'lecture', 'comprehension', 'coran')),
+  statut TEXT NOT NULL DEFAULT 'draft'
+    CHECK (statut IN ('draft', 'published', 'archived')),
+  source TEXT NOT NULL DEFAULT 'manuel'
+    CHECK (source IN ('manuel', 'ia_seed', 'ia_admin')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_questions_statut ON questions(statut);
+CREATE INDEX IF NOT EXISTS idx_questions_niveau_categorie ON questions(niveau, categorie);
+CREATE INDEX IF NOT EXISTS idx_questions_published_pool ON questions(niveau, categorie) WHERE statut = 'published';
