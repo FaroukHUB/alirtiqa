@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "db:migrate": "tsx scripts/migrate.ts",
     "db:seed-admin": "tsx scripts/seed-admin.ts",
-    "db:seed-questions": "tsx scripts/seed-questions.ts"
+    "db:seed-questions": "tsx scripts/seed-questions.ts",
+    "db:seed-questions-pdf": "tsx scripts/seed-questions-from-pdfs.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",
