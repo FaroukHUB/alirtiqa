@@ -37,7 +37,11 @@ export default async function BibliothequePublicPage() {
       <section className="relative isolate overflow-hidden bg-nuit text-creme">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-arabesque bg-[length:520px] opacity-[0.05]"
+          className="pointer-events-none absolute inset-0 bg-zellige bg-[length:160px] opacity-[0.06]"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-dore/60 to-transparent"
         />
         <div className="container-prose relative py-16 sm:py-20">
           <p className="font-display text-xs uppercase tracking-[0.4em] text-dore">
