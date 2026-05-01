@@ -115,11 +115,19 @@ export async function POST(req: NextRequest) {
 
   let blob: { url: string; pathname: string };
   try {
-    blob = await put(pathname, file, { access: "public" });
+    blob = await put(pathname, file, {
+      access: "public",
+      addRandomSuffix: false,
+    });
   } catch (err) {
+    const detail = err instanceof Error ? err.message : String(err);
     console.error("[pdfs] échec upload Blob:", err);
     return NextResponse.json(
-      { error: "Échec de l'upload sur Vercel Blob" },
+      {
+        error: `Échec upload Blob : ${detail}`,
+        hint:
+          "Vérifie qu'un Blob Store est créé sur Vercel (Settings → Storage → Create Blob) et qu'un redeploy a eu lieu après. En local, ajoute BLOB_READ_WRITE_TOKEN dans .env.local.",
+      },
       { status: 502 },
     );
   }
