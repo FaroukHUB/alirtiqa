@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, type FormEvent } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 
 type Msg = { role: "user" | "assistant"; content: string };
@@ -183,15 +184,25 @@ export function Chatbot() {
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="fixed inset-x-3 bottom-24 z-50 flex max-h-[80vh] flex-col overflow-hidden rounded-2xl border border-dore/30 bg-creme shadow-[0_24px_60px_rgba(10,26,63,0.35)] sm:inset-x-auto sm:bottom-24 sm:right-5 sm:h-[560px] sm:max-h-[80vh] sm:w-[380px]"
           >
-            <header className="relative bg-nuit px-5 py-4 text-creme">
+            <header className="relative flex items-center gap-3 bg-nuit px-5 py-4 text-creme">
               <div
                 aria-hidden
                 className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-dore/60 to-transparent"
               />
-              <p className="font-display text-[10px] uppercase tracking-[0.4em] text-dore">
-                Assistant
-              </p>
-              <h2 className="mt-1 font-display text-lg">Institut Al-Irtiqā&apos;</h2>
+              <div className="min-w-0 flex-1">
+                <p className="font-display text-[10px] uppercase tracking-[0.4em] text-dore">
+                  Assistant
+                </p>
+                <h2 className="mt-1 font-display text-lg">Institut Al-Irtiqā&apos;</h2>
+              </div>
+              <Image
+                src="/images/logoirtiqa.webp"
+                alt="Institut Al-Irtiqā'"
+                width={42}
+                height={48}
+                className="h-12 w-auto shrink-0 select-none"
+                draggable={false}
+              />
             </header>
 
             <div
