@@ -6,10 +6,16 @@ export function AideContent() {
         title="À quoi sert ce test"
       >
         <p>
-          Le test mesure le niveau d&apos;arabe d&apos;un élève en lui posant
-          quelques questions. Selon ses bonnes ou mauvaises réponses, le
-          système ajuste la difficulté pour le situer parmi l&apos;un des
-          15 niveaux du programme Al-Furqan.
+          Le test sert à orienter un élève qui sait déjà <strong>lire l&apos;arabe</strong>{" "}
+          vers l&apos;un des trois premiers niveaux du programme Al-Furqan :{" "}
+          <strong>MUQADIMA ALIF</strong> (niveau 1),{" "}
+          <strong>TA3BIR</strong> (niveau 2) ou{" "}
+          <strong>MUQADIMA BA</strong> (niveau 3). Au-delà, c&apos;est un
+          échange direct avec l&apos;élève qui détermine le niveau d&apos;entrée.
+        </p>
+        <p className="mt-3">
+          Les non-lecteurs ne passent pas le test : ils s&apos;inscrivent
+          directement en MUQADIMA ALIF.
         </p>
       </Section>
 
@@ -19,19 +25,23 @@ export function AideContent() {
       >
         <ul className="space-y-2.5">
           <Bullet>
-            L&apos;élève commence par une question de <strong>niveau 3</strong>.
+            Le test fait <strong>5 questions fixes</strong>, à difficulté
+            croissante, sur les trois premiers niveaux. Tous les élèves voient
+            le même schéma de difficulté.
           </Bullet>
           <Bullet>
-            S&apos;il répond bien, la question suivante est plus difficile.
-            S&apos;il se trompe, la suivante est plus facile.
+            Le plan : 2 questions niveau 1 (lecture, vocabulaire), 1 question
+            niveau 2 (vocabulaire), 2 questions niveau 3 (grammaire,
+            compréhension).
           </Bullet>
           <Bullet>
-            Le test fait <strong>15 questions au maximum</strong>. Il peut se
-            terminer plus tôt si le niveau de l&apos;élève devient évident
-            (par exemple s&apos;il alterne en boucle entre les niveaux 6 et 7).
+            Le test n&apos;est <strong>pas adaptatif</strong> : la difficulté
+            ne s&apos;ajuste pas en fonction des réponses, ce qui rend le score
+            plus lisible et reproductible.
           </Bullet>
           <Bullet>
-            Une question par écran, pas de retour en arrière.
+            Une question par écran, pas de retour en arrière. Durée estimée :
+            2 à 4 minutes.
           </Bullet>
           <Bullet>
             À la fin, l&apos;élève voit son niveau préconisé. On lui propose
@@ -45,15 +55,26 @@ export function AideContent() {
         title="Comment le niveau final est calculé"
       >
         <p>
-          À la fin du test, le système prend les <strong>5 dernières questions</strong>{" "}
-          répondues, regarde à quel niveau elles étaient, et calcule la valeur
-          du milieu (la médiane). C&apos;est ce niveau qu&apos;il propose à
-          l&apos;élève.
+          Le niveau préconisé dépend uniquement du nombre de bonnes réponses
+          sur les 5 questions :
         </p>
+        <ul className="mt-3 space-y-2">
+          <Bullet>
+            <strong>0 ou 1 bonne réponse</strong> → MUQADIMA ALIF (niveau 1) :
+            les bases ne sont pas solides.
+          </Bullet>
+          <Bullet>
+            <strong>2 ou 3 bonnes réponses</strong> → TA3BIR (niveau 2).
+          </Bullet>
+          <Bullet>
+            <strong>4 ou 5 bonnes réponses</strong> → MUQADIMA BA (niveau 3).
+          </Bullet>
+        </ul>
         <p className="mt-3">
-          En plus, il calcule un pourcentage de réussite par catégorie
-          (vocabulaire, grammaire, etc.) pour identifier les points forts et
-          les points faibles.
+          En plus du niveau préconisé, le système calcule un pourcentage de
+          réussite par catégorie (lecture, vocabulaire, grammaire,
+          compréhension) pour identifier rapidement les points forts et
+          faibles.
         </p>
       </Section>
 
@@ -62,25 +83,29 @@ export function AideContent() {
         title="Le pool de questions (le plus important à comprendre)"
       >
         <p>
-          Toutes les questions vivent dans une seule grande base. Quand le
-          test a besoin d&apos;une question de niveau X, il en pioche une au
-          hasard parmi celles disponibles à ce niveau.
+          Le test a besoin d&apos;une question pour chacune des 5 cases du
+          plan : (niveau 1 · lecture), (niveau 1 · vocabulaire), (niveau 2 ·
+          vocabulaire), (niveau 3 · grammaire), (niveau 3 · compréhension).
+          Pour chaque case, il en pioche une au hasard parmi les questions{" "}
+          <strong>publiées</strong> qui correspondent.
         </p>
         <div className="mt-4 rounded-xl bg-creme/60 p-5 text-sm">
           <p className="font-display text-nuit">
-            👉 Plus tu as de questions par niveau, plus le test est varié
-            entre deux élèves.
+            👉 Plus tu as de questions par case, plus le test est varié entre
+            deux élèves.
           </p>
           <p className="mt-2 text-nuit/70">
-            Si tu n&apos;as que 5 questions au niveau 3, deux élèves qui
-            démarrent ont 1 chance sur 5 de tomber sur la même première
-            question. Avec 10 questions, c&apos;est 1 sur 10.
+            Si tu n&apos;as que 3 questions sur la case (niveau 1 · lecture),
+            deux élèves qui démarrent ont 1 chance sur 3 de tomber sur la même
+            première question. Avec 8 ou 10 questions, c&apos;est beaucoup
+            plus rare.
           </p>
         </div>
         <p className="mt-4">
-          <strong>Recommandation :</strong> vise au moins 8 à 10 questions pour
-          les niveaux 2, 3, 4 et 5. Ce sont eux que les élèves voient en
-          premier, donc les plus exposés à la répétition.
+          <strong>Recommandation :</strong> vise au moins 6 questions par
+          case, soit 30 questions publiées au total. Si une case est vide, le
+          test bascule automatiquement sur une catégorie voisine au même
+          niveau, puis sur un niveau adjacent en dernier recours.
         </p>
       </Section>
 
@@ -172,11 +197,12 @@ export function AideContent() {
             <strong> ✓ Tout publier</strong> qui apparaît en haut.
           </Step>
           <Step n={2}>
-            Surveille surtout les niveaux 2, 3, 4 et 5. C&apos;est par eux
-            que les élèves passent en premier.
+            Concentre-toi sur les 5 cases servies par le test : (N1 · lecture),
+            (N1 · vocabulaire), (N2 · vocabulaire), (N3 · grammaire), (N3 ·
+            compréhension). Ce sont les seules vues par les élèves.
           </Step>
           <Step n={3}>
-            Quand un niveau te semble pauvre en variété, clique{" "}
+            Quand une case te semble pauvre en variété, clique{" "}
             <strong>✨ Générer</strong> et demande quelques questions
             supplémentaires (coût : quelques centimes par lot).
           </Step>
