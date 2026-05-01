@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { site } from "@/lib/site";
+import { ContactAction } from "./ContactAction";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -13,12 +14,23 @@ const whatsappUrl = `https://wa.me/${whatsappNumber}`;
 const telegramHandle = site.contact.telegram.replace(/^@/, "");
 const telegramUrl = `https://t.me/${telegramHandle}`;
 
-const channels = [
+type Channel = {
+  label: string;
+  description: string;
+  value: string;
+  cta: string;
+  action:
+    | { kind: "external"; href: string }
+    | { kind: "copy"; copyValue: string };
+  icon: React.ReactNode;
+};
+
+const channels: Channel[] = [
   {
     label: "WhatsApp",
     description: "Le canal le plus rapide pour échanger avec nous.",
     value: site.contact.whatsappDisplay,
-    href: whatsappUrl,
+    action: { kind: "external", href: whatsappUrl },
     cta: "Ouvrir WhatsApp",
     icon: (
       <svg
@@ -39,8 +51,8 @@ const channels = [
     label: "Email",
     description: "Pour les demandes plus longues ou les pièces jointes.",
     value: site.contact.email,
-    href: `mailto:${site.contact.email}`,
-    cta: "Envoyer un email",
+    action: { kind: "copy", copyValue: site.contact.email },
+    cta: "Copier l'adresse",
     icon: (
       <svg
         viewBox="0 0 24 24"
@@ -61,7 +73,7 @@ const channels = [
     label: "Telegram",
     description: "Suivez nos publications et posez vos questions au canal.",
     value: site.contact.telegram,
-    href: telegramUrl,
+    action: { kind: "external", href: telegramUrl },
     cta: "Ouvrir Telegram",
     icon: (
       <svg
@@ -105,34 +117,37 @@ export default function ContactPage() {
       <section className="bg-creme py-14 sm:py-20">
         <div className="container-prose">
           <ul className="grid gap-5 md:grid-cols-3">
-            {channels.map((c) => {
-              const isExternal = c.href.startsWith("http");
-              return (
-                <li
-                  key={c.label}
-                  className="group flex flex-col rounded-2xl border border-nuit/10 bg-white p-6 transition-all hover:-translate-y-0.5 hover:border-dore/40 hover:shadow-[0_8px_28px_rgba(10,26,63,0.08)]"
-                >
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-dore/10 text-dore-700">
-                    {c.icon}
-                  </div>
-                  <h2 className="mt-4 font-display text-lg text-nuit">
-                    {c.label}
-                  </h2>
-                  <p className="mt-1.5 text-sm text-nuit/65">{c.description}</p>
-                  <p className="mt-3 break-words font-mono text-sm text-nuit/85">
-                    {c.value}
-                  </p>
-                  <a
-                    href={c.href}
-                    target={isExternal ? "_blank" : undefined}
-                    rel={isExternal ? "noreferrer" : undefined}
-                    className="mt-5 inline-flex items-center justify-center gap-2 rounded-full bg-nuit px-4 py-2 text-xs font-medium text-creme transition-colors hover:bg-nuit-400"
-                  >
-                    {c.cta} →
-                  </a>
-                </li>
-              );
-            })}
+            {channels.map((c) => (
+              <li
+                key={c.label}
+                className="group flex flex-col rounded-2xl border border-nuit/10 bg-white p-6 transition-all hover:-translate-y-0.5 hover:border-dore/40 hover:shadow-[0_8px_28px_rgba(10,26,63,0.08)]"
+              >
+                <div className="flex h-11 w-11 items-center justify-center rounded-full bg-dore/10 text-dore-700">
+                  {c.icon}
+                </div>
+                <h2 className="mt-4 font-display text-lg text-nuit">
+                  {c.label}
+                </h2>
+                <p className="mt-1.5 text-sm text-nuit/65">{c.description}</p>
+                <p className="mt-3 break-words font-mono text-sm text-nuit/85">
+                  {c.value}
+                </p>
+                {c.action.kind === "external" ? (
+                  <ContactAction
+                    kind="external"
+                    href={c.action.href}
+                    label={c.cta}
+                  />
+                ) : (
+                  <ContactAction
+                    kind="copy"
+                    value={c.action.copyValue}
+                    label={c.cta}
+                    labelDone="Adresse copiée !"
+                  />
+                )}
+              </li>
+            ))}
           </ul>
 
           <div className="mt-10 grid gap-5 md:grid-cols-2">
