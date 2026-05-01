@@ -192,9 +192,6 @@ export function Chatbot() {
                 Assistant
               </p>
               <h2 className="mt-1 font-display text-lg">Institut Al-Irtiqā&apos;</h2>
-              <p className="mt-1 text-xs text-creme/65">
-                Réponses basées sur les informations du site
-              </p>
             </header>
 
             <div
