@@ -70,6 +70,32 @@ export type Question = {
   updated_at: string;
 };
 
+export type TestAttempt = {
+  id: string;
+  current_level: number;
+  niveau_final: number | null;
+  finished_at: string | null;
+  prenom: string | null;
+  email: string | null;
+  telephone: string | null;
+  age: string | null;
+  ip: string | null;
+  user_agent: string | null;
+  created_at: string;
+};
+
+export type TestAnswer = {
+  id: string;
+  attempt_id: string;
+  question_id: string;
+  level_at_time: number;
+  categorie: QuestionCategorie;
+  choix_donne: number;
+  est_correcte: boolean;
+  ordre: number;
+  created_at: string;
+};
+
 export type Inscription = {
   id: string;
   prenom: string;

@@ -86,22 +86,24 @@ const GRID: Cell[] = [
   { niveau: 15, categorie: "coran", count: 3 },
 ];
 
+// Descriptions internes alignées sur le programme officiel Al-Furqan (méthode égyptienne).
+// Sert à guider Claude pour générer des questions strictement adaptées au niveau.
 const NIVEAU_DESC: Record<number, string> = {
-  1: "Alphabet arabe — reconnaissance des 28 lettres et leurs formes (isolée, initiale, médiane, finale).",
-  2: "Voyelles brèves (harakāt) — fatḥa, kasra, ḍamma, sukūn ; lire des syllabes vocalisées.",
-  3: "Mots simples du quotidien — bayt, kitāb, qalam, bāb, walad, etc. Reconnaissance et sens de base.",
-  4: "Phrases simples (jumla basique) — sujet + verbe court ou nom + adjectif. Construction très basique.",
-  5: "Pronoms personnels et démonstratifs — anā, anta, anti, huwa, hiya / hādhā, hādhihi, dhālika, tilka.",
-  6: "Verbe au passé (al-fiʿl al-māḍī) — conjugaison du modèle kataba, faʿala, à toutes les personnes.",
-  7: "Verbe au présent (al-fiʿl al-muḍāriʿ) — conjugaison de yaktubu, yafʿalu, à toutes les personnes.",
-  8: "Phrase verbale (jumla fiʿliyya) vs phrase nominale (jumla ismiyya) — distinction et structure.",
-  9: "Cas du nom — al-rafʿ (nominatif), al-naṣb (accusatif), al-jarr (génitif). Marques flexionnelles.",
-  10: "Verbes augmentés (al-fiʿl al-mazīd) — schèmes afʿala, faʿʿala, fāʿala, tafāʿala, etc.",
-  11: "Particules (al-ḥurūf) — inna et ses sœurs, kāna et ses sœurs, ḥurūf al-jarr, ḥurūf al-nasb.",
-  12: "Phrases coraniques courtes — versets très courts à comprendre mot à mot avec aide.",
-  13: "Sarf avancé — al-wazn (les schèmes), ism al-fāʿil, ism al-mafʿūl, al-maṣdar.",
-  14: "Nahw avancé — al-iʿrāb complet d'une phrase, particules complexes, exceptions.",
-  15: "Compréhension de Coran et de Sunna — versets et hadiths, analyse grammaticale et sens global.",
+  1: "MUQADIMA ALIF (Initiation) — Alphabet arabe (sorties de lettres, voyelles courtes et longues), chiffres, jours de la semaine, mois, vocabulaire de base. Aucun pré-requis.",
+  2: "TA3BIR (Initiation) — Adjectifs et métiers, verbes, pronoms personnels et démonstratifs, particules grammaticales, dialogues pratiques. Pré-requis : sait lire et écrire.",
+  3: "MUQADIMA BA (Préparation) — Types de mots approfondis, verbes conjugués illustrés, textes thématiques (maison, mosquée, classe), apprentissage de l'heure.",
+  4: "TIMHIDI ALIF (Préparation) — Textes plus longs (milieux scolaire, médical, restauration), présentation personnelle, pronoms sous différentes formes, possession, défini et indéfini.",
+  5: "TIMHIDI BA (Préparation) — Textes géographiques, médicaux, quotidiens (famille). Règles de grammaire approfondies, conjugaison verbale, enrichissement vocabulaire oral et écrit.",
+  6: "MOUSTAWA 1 (Approfondissement) — Textes (sport, zoo, démarches administratives), règles d'écriture de la Hamza, formation et déclinaison du pluriel masculin, Inna wa akhawatuha et Kāna wa akhawatuha.",
+  7: "MOUSTAWA 2 (Approfondissement) — Pluriel féminin et duel, analyse grammaticale (al-iʿrāb), construction des noms et verbes, textes (appartement, achats, mariage), poésie.",
+  8: "MOUSTAWA 3 (Approfondissement) — Textes technologie/communication, Ramadan. Noms invariables (mamnūʿ min al-ṣarf), bases de la conjugaison (mīzān al-ṣarfī), poésie.",
+  9: "MOUSTAWA 4 (Approfondissement) — Textes histoire des prophètes (Soulaymān), poèmes, bases conjugaison (al-maṣādir al-thulāthiyya), expressions arabes idiomatiques.",
+  10: "MOUSTAWA 5 (Approfondissement) — Textes prophètes (Mūsā et Khaḍir, Dāwūd, sourate Ṣād), texte sur la fitnah de l'argent (sourate Al-Qalam), poèmes, grammaire (adjectifs, adverbes, compléments de temps/lieu), figures de style.",
+  11: "MOUSTAWA 6 (Approfondissement) — Sourate Al-Kahf (Gens de la Caverne), thèmes de science religieuse, poèmes science et vérité, rhétorique arabe approfondie, interpellation (al-nidāʾ), liaison des mots.",
+  12: "MOUSTAWA 7 (Approfondissement) — Textes Pharaon et Mūsā (sourate Al-Qaṣaṣ), différents types de maṣdar, sujet (al-fāʿil) et complément direct (al-mafʿūl bihi), exception (al-istithnāʾ), Kāda wa akhawatuha.",
+  13: "MOUSTAWA 8 (Approfondissement) — Textes prophète Yūsuf, rôles sujet/complément direct/nom verbal, précédence Khabar sur Mubtadaʾ, Dhanna wa akhawatuha, expressions (critique, éloge, étonnement, exclamation).",
+  14: "MOUSTAWA 9 (Spécialisation) — Vie du Prophète Muḥammad ﷺ (avant Révélation jusqu'à Badr), ḥurūf al-jarr, écriture de la hamza avec Inna, négation.",
+  15: "MOUSTAWA 10 (Spécialisation) — Vie du Prophète Muḥammad ﷺ (d'Uḥud à sa mort), catégories du tanwīn, diminutif (al-taṣghīr), nasab (descendance), al-tanāzuʿ.",
 };
 
 const CATEGORIE_DESC: Record<Categorie, string> = {

@@ -1,6 +1,13 @@
 import nodemailer, { type Transporter } from "nodemailer";
 import { site } from "@/lib/site";
-import type { Inscription, InscriptionFormule } from "@/lib/db";
+import { niveaux } from "@/lib/niveaux";
+import type {
+  Inscription,
+  InscriptionFormule,
+  TestAttempt,
+  TestAnswer,
+} from "@/lib/db";
+import { scoresParCategorie } from "@/lib/test-engine";
 
 let _transporter: Transporter | null = null;
 
@@ -123,6 +130,91 @@ export async function sendAdminNotif(i: Inscription): Promise<boolean> {
     return true;
   } catch (err) {
     console.error("[mailer] échec envoi mail admin:", err);
+    return false;
+  }
+}
+
+const CATEGORIE_LABEL: Record<string, string> = {
+  vocabulaire: "Vocabulaire",
+  grammaire: "Grammaire",
+  sarf: "Sarf / Conjugaison",
+  lecture: "Lecture / Voyellation",
+  comprehension: "Compréhension",
+  coran: "Coran / Hadith",
+};
+
+function testResultBody(
+  attempt: TestAttempt,
+  answers: TestAnswer[],
+): string {
+  const niveau = attempt.niveau_final ?? 0;
+  const niveauInfo = niveaux.find((n) => n.numero === niveau);
+  const scores = scoresParCategorie(
+    answers.map((a) => ({
+      level_at_time: a.level_at_time,
+      categorie: a.categorie,
+      est_correcte: a.est_correcte,
+    })),
+  );
+  const correctTotal = answers.filter((a) => a.est_correcte).length;
+
+  const lignes: (string | null)[] = [
+    `Test de niveau terminé le ${fmtDate(attempt.created_at)}.`,
+    "",
+    "— Candidat —",
+    `Prénom : ${attempt.prenom ?? "—"}`,
+    `Email : ${attempt.email ?? "—"}`,
+    attempt.telephone ? `Téléphone : ${attempt.telephone}` : null,
+    attempt.age ? `Âge : ${attempt.age}` : null,
+    "",
+    "— Résultat —",
+    `Niveau estimé : ${niveau}${niveauInfo ? ` — ${niveauInfo.titre} (${niveauInfo.cycle})` : ""}`,
+    `Score global : ${correctTotal} / ${answers.length} bonnes réponses`,
+    "",
+    "— Détail par catégorie —",
+  ];
+
+  for (const [cat, s] of Object.entries(scores)) {
+    if (!s) continue;
+    lignes.push(
+      `  • ${CATEGORIE_LABEL[cat]} : ${s.correct}/${s.total} (${s.pct}%)`,
+    );
+  }
+
+  lignes.push(
+    "",
+    "—",
+    "Voir le détail dans l'admin :",
+    `${site.url}/admin/inscriptions`,
+  );
+
+  return lignes.filter((l) => l !== null).join("\n");
+}
+
+export async function sendTestResultNotif(
+  attempt: TestAttempt,
+  answers: TestAnswer[],
+): Promise<boolean> {
+  const transporter = getTransporter();
+  if (!transporter) {
+    console.warn("[mailer] SMTP non configuré, mail test non envoyé");
+    return false;
+  }
+  const adminEmail = process.env.ADMIN_EMAIL ?? site.contact.email;
+  const from = process.env.SMTP_FROM ?? process.env.SMTP_USER!;
+  const niveau = attempt.niveau_final ?? 0;
+  const niveauInfo = niveaux.find((n) => n.numero === niveau);
+  try {
+    await transporter.sendMail({
+      from,
+      to: adminEmail,
+      replyTo: attempt.email ?? undefined,
+      subject: `Test de niveau — ${attempt.prenom ?? "Anonyme"} → niveau ${niveau}${niveauInfo ? ` (${niveauInfo.titre})` : ""}`,
+      text: testResultBody(attempt, answers),
+    });
+    return true;
+  } catch (err) {
+    console.error("[mailer] échec envoi mail test:", err);
     return false;
   }
 }

@@ -16,21 +16,21 @@ const CATEGORIES = [
 ] as const;
 
 const NIVEAU_DESC: Record<number, string> = {
-  1: "Alphabet arabe — reconnaissance des 28 lettres et leurs formes.",
-  2: "Voyelles brèves (harakāt) — fatḥa, kasra, ḍamma, sukūn.",
-  3: "Mots simples du quotidien.",
-  4: "Phrases simples (jumla basique).",
-  5: "Pronoms personnels et démonstratifs.",
-  6: "Verbe au passé (al-fiʿl al-māḍī).",
-  7: "Verbe au présent (al-fiʿl al-muḍāriʿ).",
-  8: "Phrase verbale vs phrase nominale.",
-  9: "Cas du nom — rafʿ, naṣb, jarr.",
-  10: "Verbes augmentés (al-fiʿl al-mazīd).",
-  11: "Particules (al-ḥurūf) — inna et ses sœurs, kāna et ses sœurs.",
-  12: "Phrases coraniques courtes.",
-  13: "Sarf avancé — al-wazn, ism al-fāʿil/mafʿūl.",
-  14: "Nahw avancé — al-iʿrāb complet.",
-  15: "Compréhension de Coran et de Sunna.",
+  1: "MUQADIMA ALIF (Initiation) — Alphabet, voyelles courtes/longues, chiffres, jours, mois, vocabulaire de base.",
+  2: "TA3BIR (Initiation) — Adjectifs, métiers, verbes, pronoms personnels/démonstratifs, particules, dialogues.",
+  3: "MUQADIMA BA (Préparation) — Types de mots, verbes conjugués, textes (maison, mosquée, classe), heure.",
+  4: "TIMHIDI ALIF (Préparation) — Textes scolaire/médical/restauration, présentation, pronoms, possession, défini/indéfini.",
+  5: "TIMHIDI BA (Préparation) — Textes géographie/médecine/famille, grammaire et conjugaison approfondies.",
+  6: "MOUSTAWA 1 (Approfondissement) — Hamza, pluriel masculin, Inna wa akhawatuha, Kāna wa akhawatuha.",
+  7: "MOUSTAWA 2 (Approfondissement) — Pluriel féminin, duel, al-iʿrāb, construction noms/verbes, poésie.",
+  8: "MOUSTAWA 3 (Approfondissement) — Noms invariables (mamnūʿ min al-ṣarf), mīzān al-ṣarfī, technologie, Ramadan.",
+  9: "MOUSTAWA 4 (Approfondissement) — Histoire des prophètes (Soulaymān), al-maṣādir al-thulāthiyya, expressions.",
+  10: "MOUSTAWA 5 (Approfondissement) — Mūsā/Khaḍir, Dāwūd, sourate Ṣād/Al-Qalam, adjectifs, adverbes, figures de style.",
+  11: "MOUSTAWA 6 (Approfondissement) — Sourate Al-Kahf, rhétorique, interpellation (al-nidāʾ), liaison des mots.",
+  12: "MOUSTAWA 7 (Approfondissement) — Sourate Al-Qaṣaṣ, types de maṣdar, al-fāʿil, al-mafʿūl bihi, al-istithnāʾ.",
+  13: "MOUSTAWA 8 (Approfondissement) — Sourate Yūsuf, Khabar/Mubtadaʾ, Dhanna wa akhawatuha, expressions.",
+  14: "MOUSTAWA 9 (Spécialisation) — Vie du Prophète ﷺ avant Badr, ḥurūf al-jarr, hamza avec Inna, négation.",
+  15: "MOUSTAWA 10 (Spécialisation) — Vie du Prophète ﷺ d'Uḥud à sa mort, tanwīn, diminutif, nasab, al-tanāzuʿ.",
 };
 
 const CATEGORIE_DESC: Record<(typeof CATEGORIES)[number], string> = {

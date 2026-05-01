@@ -77,3 +77,37 @@ CREATE TABLE IF NOT EXISTS questions (
 CREATE INDEX IF NOT EXISTS idx_questions_statut ON questions(statut);
 CREATE INDEX IF NOT EXISTS idx_questions_niveau_categorie ON questions(niveau, categorie);
 CREATE INDEX IF NOT EXISTS idx_questions_published_pool ON questions(niveau, categorie) WHERE statut = 'published';
+
+-- Tentatives de test (1 par session de test)
+CREATE TABLE IF NOT EXISTS test_attempts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  current_level INT NOT NULL DEFAULT 3,
+  niveau_final INT,
+  finished_at TIMESTAMPTZ,
+  prenom TEXT,
+  email TEXT,
+  telephone TEXT,
+  age TEXT,
+  ip TEXT,
+  user_agent TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_test_attempts_created_at ON test_attempts(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_test_attempts_finished ON test_attempts(finished_at DESC NULLS LAST);
+CREATE INDEX IF NOT EXISTS idx_test_attempts_email ON test_attempts(email) WHERE email IS NOT NULL;
+
+-- Réponses individuelles d'une tentative
+CREATE TABLE IF NOT EXISTS test_answers (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  attempt_id UUID NOT NULL REFERENCES test_attempts(id) ON DELETE CASCADE,
+  question_id UUID NOT NULL REFERENCES questions(id) ON DELETE RESTRICT,
+  level_at_time INT NOT NULL,
+  categorie TEXT NOT NULL,
+  choix_donne INT NOT NULL,
+  est_correcte BOOLEAN NOT NULL,
+  ordre INT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_test_answers_attempt_ordre ON test_answers(attempt_id, ordre);
