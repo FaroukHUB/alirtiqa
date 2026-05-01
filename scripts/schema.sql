@@ -29,3 +29,27 @@ CREATE TABLE IF NOT EXISTS chatbot_log (
 );
 
 CREATE INDEX IF NOT EXISTS idx_chatbot_log_ip_created ON chatbot_log(ip, created_at DESC);
+
+-- Inscriptions (demandes d'inscription depuis le formulaire public, suivi pipeline)
+CREATE TABLE IF NOT EXISTS inscriptions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  prenom TEXT NOT NULL,
+  nom TEXT NOT NULL,
+  email TEXT NOT NULL,
+  telephone TEXT,
+  age TEXT,
+  formule TEXT NOT NULL CHECK (formule IN ('particulier', 'duo', 'groupe')),
+  niveau TEXT,
+  disponibilite TEXT,
+  message TEXT,
+  statut TEXT NOT NULL DEFAULT 'nouveau'
+    CHECK (statut IN ('nouveau', 'contacte', 'essai', 'inscrit', 'refus', 'sans_suite')),
+  note_admin TEXT,
+  ip TEXT,
+  user_agent TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_inscriptions_statut ON inscriptions(statut);
+CREATE INDEX IF NOT EXISTS idx_inscriptions_created_at ON inscriptions(created_at DESC);

@@ -14,10 +14,12 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.91.1",
     "@neondatabase/serverless": "^1.1.0",
+    "@types/nodemailer": "^8.0.0",
     "bcryptjs": "^3.0.3",
     "framer-motion": "^11.11.17",
     "next": "14.2.18",
     "next-auth": "^4.24.14",
+    "nodemailer": "^7.0.13",
     "prompts": "^2.4.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

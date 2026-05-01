@@ -1,10 +1,9 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import { formules } from "@/lib/formules";
-import { site } from "@/lib/site";
 import { cn } from "@/lib/cn";
 
 type FormState = {
@@ -17,6 +16,7 @@ type FormState = {
   niveau: string;
   disponibilite: string;
   message: string;
+  website: string;
 };
 
 const initialState = (preselected?: string | null): FormState => ({
@@ -29,6 +29,7 @@ const initialState = (preselected?: string | null): FormState => ({
   niveau: "Débutant",
   disponibilite: "",
   message: "",
+  website: "",
 });
 
 const niveauOptions = [
@@ -39,41 +40,91 @@ const niveauOptions = [
   "Je préfère passer le test",
 ];
 
-function buildBody(s: FormState) {
-  const lignes = [
-    "Bonjour,",
-    "",
-    "Je souhaiterais m'inscrire aux cours de l'Institut Al-Irtiqā'.",
-    "",
-    `• Nom : ${s.prenom} ${s.nom}`.trim(),
-    s.email && `• Email : ${s.email}`,
-    s.telephone && `• Téléphone : ${s.telephone}`,
-    s.age && `• Âge : ${s.age}`,
-    `• Formule souhaitée : ${s.formule}`,
-    `• Niveau estimé : ${s.niveau}`,
-    s.disponibilite && `• Disponibilités : ${s.disponibilite}`,
-    s.message && `• Message : ${s.message}`,
-    "",
-    "Merci.",
-  ].filter(Boolean);
-  return lignes.join("\n");
-}
+type SubmitState =
+  | { kind: "idle" }
+  | { kind: "loading" }
+  | { kind: "success" }
+  | { kind: "error"; message: string };
 
 export function InscriptionForm() {
   const searchParams = useSearchParams();
   const preselected = searchParams.get("formule");
   const [form, setForm] = useState<FormState>(() => initialState(preselected));
+  const [state, setState] = useState<SubmitState>({ kind: "idle" });
 
   const update = <K extends keyof FormState>(k: K, v: FormState[K]) =>
     setForm((p) => ({ ...p, [k]: v }));
 
-  const subject = "Inscription Institut Al-Irtiqā'";
-  const body = useMemo(() => buildBody(form), [form]);
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (state.kind === "loading") return;
+    setState({ kind: "loading" });
 
-  const mailtoUrl = `mailto:${site.contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  const whatsappUrl = `https://wa.me/${site.contact.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(body)}`;
+    try {
+      const res = await fetch("/api/inscriptions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setState({
+          kind: "error",
+          message:
+            data?.error ??
+            "Une erreur est survenue. Merci de réessayer dans un instant.",
+        });
+        return;
+      }
+      setState({ kind: "success" });
+    } catch {
+      setState({
+        kind: "error",
+        message:
+          "Connexion impossible. Vérifiez votre réseau et réessayez.",
+      });
+    }
+  }
 
-  const requiredFilled = form.prenom && form.nom && form.email;
+  if (state.kind === "success") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="mx-auto max-w-3xl rounded-2xl border border-dore/40 bg-white p-10 text-center sm:p-14"
+      >
+        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-dore/15">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className="h-7 w-7 text-dore-700"
+            aria-hidden
+          >
+            <path d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h2 className="mt-6 font-display text-2xl text-nuit sm:text-3xl">
+          Votre demande a bien été reçue
+        </h2>
+        <p className="mt-4 text-sm leading-relaxed text-nuit/75 sm:text-base">
+          Bārak Allāhu fīkum. Un email de confirmation vient de vous être
+          envoyé. Notre équipe vous recontactera in shā&apos;a Llāh sous 48 heures
+          ouvrées, par WhatsApp ou par email.
+        </p>
+        <p className="mt-6 text-xs text-nuit/55">
+          Si vous ne recevez pas notre email, pensez à vérifier vos courriers
+          indésirables.
+        </p>
+      </motion.div>
+    );
+  }
+
+  const isLoading = state.kind === "loading";
 
   return (
     <motion.form
@@ -81,7 +132,8 @@ export function InscriptionForm() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
       className="mx-auto grid max-w-3xl gap-6 rounded-2xl border border-nuit/10 bg-white p-8 sm:p-10"
-      onSubmit={(e) => e.preventDefault()}
+      onSubmit={onSubmit}
+      noValidate
     >
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Prénom *" required>
@@ -195,34 +247,64 @@ export function InscriptionForm() {
         />
       </Field>
 
-      <div className="grid gap-3 pt-2 sm:grid-cols-2">
-        <a
-          href={requiredFilled ? mailtoUrl : "#"}
-          aria-disabled={!requiredFilled}
+      {/* Honeypot anti-spam — caché aux humains, visible aux bots */}
+      <div className="hidden" aria-hidden="true">
+        <label>
+          Site web (laisser vide)
+          <input
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={form.website}
+            onChange={(e) => update("website", e.target.value)}
+          />
+        </label>
+      </div>
+
+      {state.kind === "error" && (
+        <div
+          role="alert"
+          className="rounded-md border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800"
+        >
+          {state.message}
+        </div>
+      )}
+
+      <div className="pt-2">
+        <button
+          type="submit"
+          disabled={isLoading}
           className={cn(
-            "inline-flex items-center justify-center gap-2 rounded-full bg-nuit px-6 py-3 font-medium tracking-wide text-creme transition-colors duration-300",
-            requiredFilled ? "hover:bg-nuit-400" : "pointer-events-none opacity-50",
+            "inline-flex w-full items-center justify-center gap-2 rounded-full bg-nuit px-6 py-3 font-medium tracking-wide text-creme transition-colors duration-300 sm:w-auto",
+            isLoading
+              ? "cursor-wait opacity-70"
+              : "hover:bg-nuit-400",
           )}
         >
-          Envoyer par email
-        </a>
-        <a
-          href={requiredFilled ? whatsappUrl : "#"}
-          target="_blank"
-          rel="noreferrer"
-          aria-disabled={!requiredFilled}
-          className={cn(
-            "inline-flex items-center justify-center gap-2 rounded-full bg-dore px-6 py-3 font-medium tracking-wide text-nuit transition-colors duration-300",
-            requiredFilled ? "hover:bg-dore-300" : "pointer-events-none opacity-50",
+          {isLoading ? (
+            <>
+              <svg
+                viewBox="0 0 24 24"
+                className="h-4 w-4 animate-spin"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden
+              >
+                <circle cx="12" cy="12" r="9" opacity="0.25" />
+                <path d="M21 12a9 9 0 00-9-9" strokeLinecap="round" />
+              </svg>
+              Envoi en cours…
+            </>
+          ) : (
+            "Envoyer ma demande"
           )}
-        >
-          Envoyer par WhatsApp
-        </a>
+        </button>
       </div>
 
       <p className="text-xs text-nuit/55">
-        En envoyant, vous nous transmettez les informations renseignées
-        ci-dessus. Aucune donnée n&apos;est encore stockée sur ce site.
+        Vos informations sont utilisées uniquement pour traiter votre demande
+        d&apos;inscription. Aucune diffusion à des tiers.
       </p>
     </motion.form>
   );

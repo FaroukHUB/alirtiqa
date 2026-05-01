@@ -32,3 +32,32 @@ export type Admin = {
   password_hash: string;
   created_at: string;
 };
+
+export type InscriptionStatut =
+  | "nouveau"
+  | "contacte"
+  | "essai"
+  | "inscrit"
+  | "refus"
+  | "sans_suite";
+
+export type InscriptionFormule = "particulier" | "duo" | "groupe";
+
+export type Inscription = {
+  id: string;
+  prenom: string;
+  nom: string;
+  email: string;
+  telephone: string | null;
+  age: string | null;
+  formule: InscriptionFormule;
+  niveau: string | null;
+  disponibilite: string | null;
+  message: string | null;
+  statut: InscriptionStatut;
+  note_admin: string | null;
+  ip: string | null;
+  user_agent: string | null;
+  created_at: string;
+  updated_at: string;
+};

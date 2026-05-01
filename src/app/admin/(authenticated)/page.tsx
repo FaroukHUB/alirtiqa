@@ -4,14 +4,26 @@ import { sql } from "@/lib/db";
 type CountRow = { count: string };
 
 async function getStats() {
-  const [pendingRows, approvedRows] = (await Promise.all([
+  const [
+    avisPending,
+    avisApproved,
+    inscNouveau,
+    inscEnCours,
+    inscInscrit,
+  ] = (await Promise.all([
     sql`SELECT COUNT(*)::text AS count FROM avis WHERE statut = 'pending'`,
     sql`SELECT COUNT(*)::text AS count FROM avis WHERE statut = 'approved'`,
-  ])) as [CountRow[], CountRow[]];
+    sql`SELECT COUNT(*)::text AS count FROM inscriptions WHERE statut = 'nouveau'`,
+    sql`SELECT COUNT(*)::text AS count FROM inscriptions WHERE statut IN ('contacte', 'essai')`,
+    sql`SELECT COUNT(*)::text AS count FROM inscriptions WHERE statut = 'inscrit'`,
+  ])) as [CountRow[], CountRow[], CountRow[], CountRow[], CountRow[]];
 
   return {
-    pending: parseInt(pendingRows[0].count, 10),
-    approved: parseInt(approvedRows[0].count, 10),
+    avisPending: parseInt(avisPending[0].count, 10),
+    avisApproved: parseInt(avisApproved[0].count, 10),
+    inscNouveau: parseInt(inscNouveau[0].count, 10),
+    inscEnCours: parseInt(inscEnCours[0].count, 10),
+    inscInscrit: parseInt(inscInscrit[0].count, 10),
   };
 }
 
@@ -25,33 +37,72 @@ export default async function AdminHome() {
           <p className="font-display text-xs uppercase tracking-[0.3em] text-dore-700">
             Tableau de bord
           </p>
-          <h1 className="mt-2 font-display text-3xl text-nuit">
-            Bienvenue
-          </h1>
+          <h1 className="mt-2 font-display text-3xl text-nuit">Bienvenue</h1>
           <p className="mt-3 max-w-xl text-sm text-nuit/65">
             Vue d&apos;ensemble du site et accès aux modules de gestion.
           </p>
         </div>
 
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <KpiCard
-            label="Avis en attente"
-            value={stats.pending}
-            href="/admin/avis?statut=pending"
-            highlight={stats.pending > 0}
-          />
-          <KpiCard
-            label="Avis publiés"
-            value={stats.approved}
-            href="/admin/avis?statut=approved"
-          />
-        </div>
+        <section className="mt-10">
+          <h2 className="font-display text-sm uppercase tracking-[0.25em] text-nuit/55">
+            Inscriptions
+          </h2>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <KpiCard
+              label="Nouvelles demandes"
+              value={stats.inscNouveau}
+              href="/admin/inscriptions"
+              highlight={stats.inscNouveau > 0}
+            />
+            <KpiCard
+              label="En cours de traitement"
+              value={stats.inscEnCours}
+              href="/admin/inscriptions?statut=contacte"
+            />
+            <KpiCard
+              label="Élèves inscrits"
+              value={stats.inscInscrit}
+              href="/admin/inscriptions?statut=inscrit"
+            />
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <h2 className="font-display text-sm uppercase tracking-[0.25em] text-nuit/55">
+            Avis
+          </h2>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <KpiCard
+              label="Avis en attente"
+              value={stats.avisPending}
+              href="/admin/avis?statut=pending"
+              highlight={stats.avisPending > 0}
+            />
+            <KpiCard
+              label="Avis publiés"
+              value={stats.avisApproved}
+              href="/admin/avis?statut=approved"
+            />
+          </div>
+        </section>
 
         <div className="mt-10">
           <h2 className="font-display text-sm uppercase tracking-[0.25em] text-nuit/55">
             Modules disponibles
           </h2>
           <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+            <li className="rounded-xl border border-nuit/10 bg-white p-5">
+              <Link
+                href="/admin/inscriptions"
+                className="font-display text-base text-nuit hover:text-dore-700"
+              >
+                Gérer les inscriptions →
+              </Link>
+              <p className="mt-1.5 text-sm text-nuit/60">
+                Suivre le pipeline des demandes : nouveau, contacté, essai,
+                inscrit. Export CSV disponible.
+              </p>
+            </li>
             <li className="rounded-xl border border-nuit/10 bg-white p-5">
               <Link
                 href="/admin/avis"
@@ -67,8 +118,8 @@ export default async function AdminHome() {
           </ul>
 
           <p className="mt-6 text-xs text-nuit/45">
-            Bibliothèque, questions du test, inscriptions, statistiques :
-            arrivent prochainement.
+            Bibliothèque, questions du test, statistiques : arrivent
+            prochainement.
           </p>
         </div>
       </div>
