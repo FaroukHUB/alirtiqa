@@ -19,23 +19,20 @@ type Categorie =
 type Cell = { categorie: Categorie; count: number };
 type GridByLevel = Record<number, Cell[]>;
 
-// Même grille pédagogique que le seed précédent — total 75 questions
+// Grille pédagogique alignée sur le test 2 phases (niveaux 1-10 uniquement)
+// Niveaux 1-3 : lecture lourde (utilisée par la phase 1 du test)
+// Niveaux 4-10 : grammaire / sarf / comprehension (utilisée par la phase 2 ladder)
 const GRID: GridByLevel = {
-  1: [{ categorie: "vocabulaire", count: 2 }, { categorie: "lecture", count: 3 }],
-  2: [{ categorie: "vocabulaire", count: 2 }, { categorie: "lecture", count: 3 }],
-  3: [{ categorie: "vocabulaire", count: 2 }, { categorie: "grammaire", count: 1 }, { categorie: "lecture", count: 2 }],
-  4: [{ categorie: "vocabulaire", count: 2 }, { categorie: "grammaire", count: 1 }, { categorie: "sarf", count: 1 }, { categorie: "lecture", count: 1 }],
-  5: [{ categorie: "vocabulaire", count: 1 }, { categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 1 }, { categorie: "lecture", count: 1 }],
-  6: [{ categorie: "vocabulaire", count: 1 }, { categorie: "grammaire", count: 1 }, { categorie: "sarf", count: 2 }, { categorie: "comprehension", count: 1 }],
-  7: [{ categorie: "vocabulaire", count: 1 }, { categorie: "grammaire", count: 1 }, { categorie: "sarf", count: 2 }, { categorie: "comprehension", count: 1 }],
-  8: [{ categorie: "vocabulaire", count: 1 }, { categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 1 }, { categorie: "comprehension", count: 1 }],
+  1: [{ categorie: "lecture", count: 4 }, { categorie: "vocabulaire", count: 2 }],
+  2: [{ categorie: "lecture", count: 4 }, { categorie: "vocabulaire", count: 2 }],
+  3: [{ categorie: "lecture", count: 3 }, { categorie: "vocabulaire", count: 2 }, { categorie: "grammaire", count: 1 }],
+  4: [{ categorie: "vocabulaire", count: 2 }, { categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 1 }],
+  5: [{ categorie: "vocabulaire", count: 1 }, { categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 2 }],
+  6: [{ categorie: "vocabulaire", count: 1 }, { categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 2 }, { categorie: "comprehension", count: 1 }],
+  7: [{ categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 2 }, { categorie: "comprehension", count: 1 }],
+  8: [{ categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 1 }, { categorie: "comprehension", count: 2 }],
   9: [{ categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 1 }, { categorie: "comprehension", count: 1 }, { categorie: "coran", count: 1 }],
   10: [{ categorie: "grammaire", count: 1 }, { categorie: "sarf", count: 2 }, { categorie: "comprehension", count: 1 }, { categorie: "coran", count: 1 }],
-  11: [{ categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 1 }, { categorie: "comprehension", count: 1 }, { categorie: "coran", count: 1 }],
-  12: [{ categorie: "grammaire", count: 1 }, { categorie: "sarf", count: 1 }, { categorie: "comprehension", count: 1 }, { categorie: "coran", count: 2 }],
-  13: [{ categorie: "grammaire", count: 1 }, { categorie: "sarf", count: 2 }, { categorie: "comprehension", count: 1 }, { categorie: "coran", count: 1 }],
-  14: [{ categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 1 }, { categorie: "comprehension", count: 1 }, { categorie: "coran", count: 1 }],
-  15: [{ categorie: "grammaire", count: 1 }, { categorie: "comprehension", count: 1 }, { categorie: "coran", count: 3 }],
 };
 
 const CATEGORIE_DESC: Record<Categorie, string> = {

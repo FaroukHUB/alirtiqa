@@ -3,14 +3,22 @@ import { z } from "zod";
 import { sql } from "@/lib/db";
 import {
   TEST_MAX_QUESTIONS,
+  TEST_MIN_LEVEL,
+  PHASE_1_LENGTH,
+  PHASE_1_PLAN,
+  PHASE_2_START_LEVEL,
+  PHASE_2_MIN_LEVEL,
+  PHASE_2_MAX_LEVEL,
   nextLevel,
-  shouldStop,
-  niveauFinal,
+  shouldStopPhase2,
+  niveauFinalPhase2,
+  phase1Passed,
   type AnswerLog,
 } from "@/lib/test-engine";
 import {
   answeredQuestionIds,
   loadQuestion,
+  pickPhase1Question,
   pickQuestion,
   toPublic,
   type PublicQuestion,
@@ -104,8 +112,82 @@ export async function POST(req: NextRequest) {
     ORDER BY ordre ASC
   `) as AnswerLog[];
 
-  if (shouldStop(histRows)) {
-    const niveau = niveauFinal(histRows);
+  const totalAnswered = histRows.length;
+  const excludeIds = await answeredQuestionIds(attempt_id);
+
+  // === PHASE 1 ===
+  if (totalAnswered < PHASE_1_LENGTH) {
+    // Encore en phase 1 : on sert la question suivante du plan fixe
+    const slot = PHASE_1_PLAN[totalAnswered];
+    const next = await pickPhase1Question(slot.niveau, slot.categorie, excludeIds);
+    if (!next) {
+      // Pool vraiment trop petit : on finalise au minimum
+      await sql`
+        UPDATE test_attempts
+        SET niveau_final = ${TEST_MIN_LEVEL}, finished_at = NOW()
+        WHERE id = ${attempt_id}
+      `;
+      return NextResponse.json<AnswerResponse>({
+        finished: true,
+        attempt_id,
+        niveau_final: TEST_MIN_LEVEL,
+      });
+    }
+    await sql`
+      UPDATE test_attempts SET current_level = ${next.niveau} WHERE id = ${attempt_id}
+    `;
+    return NextResponse.json<AnswerResponse>({
+      finished: false,
+      question: toPublic(next),
+      question_number: totalAnswered + 1,
+      max_questions: TEST_MAX_QUESTIONS,
+    });
+  }
+
+  // === Fin de phase 1, vérification ===
+  if (totalAnswered === PHASE_1_LENGTH) {
+    if (!phase1Passed(histRows)) {
+      // Lecture pas acquise : test terminé, niveau 1
+      await sql`
+        UPDATE test_attempts
+        SET niveau_final = ${TEST_MIN_LEVEL}, finished_at = NOW()
+        WHERE id = ${attempt_id}
+      `;
+      return NextResponse.json<AnswerResponse>({
+        finished: true,
+        attempt_id,
+        niveau_final: TEST_MIN_LEVEL,
+      });
+    }
+    // Phase 1 réussie : on entame la phase 2 au niveau de départ
+    const next = await pickQuestion(PHASE_2_START_LEVEL, excludeIds);
+    if (!next) {
+      // Aucune question phase 2 disponible : on finalise au niveau de départ
+      await sql`
+        UPDATE test_attempts
+        SET niveau_final = ${PHASE_2_START_LEVEL}, finished_at = NOW()
+        WHERE id = ${attempt_id}
+      `;
+      return NextResponse.json<AnswerResponse>({
+        finished: true,
+        attempt_id,
+        niveau_final: PHASE_2_START_LEVEL,
+      });
+    }
+    await sql`
+      UPDATE test_attempts SET current_level = ${next.niveau} WHERE id = ${attempt_id}
+    `;
+    return NextResponse.json<AnswerResponse>({
+      finished: false,
+      question: toPublic(next),
+      question_number: totalAnswered + 1,
+      max_questions: TEST_MAX_QUESTIONS,
+    });
+  }
+
+  // === PHASE 2 (ladder) ===
+  if (shouldStopPhase2(histRows)) {
+    const niveau = niveauFinalPhase2(histRows);
     await sql`
       UPDATE test_attempts
       SET niveau_final = ${niveau}, finished_at = NOW()
@@ -118,12 +200,16 @@ export async function POST(req: NextRequest) {
     });
   }
 
-  const targetLevel = nextLevel(level_at_time, est_correcte);
-  const excludeIds = await answeredQuestionIds(attempt_id);
+  const targetLevel = nextLevel(
+    level_at_time,
+    est_correcte,
+    PHASE_2_MIN_LEVEL,
+    PHASE_2_MAX_LEVEL,
+  );
   const next = await pickQuestion(targetLevel, excludeIds);
 
   if (!next) {
-    const niveau = niveauFinal(histRows);
+    const niveau = niveauFinalPhase2(histRows);
     await sql`
       UPDATE test_attempts
       SET niveau_final = ${niveau}, finished_at = NOW()
@@ -145,7 +231,7 @@ export async function POST(req: NextRequest) {
   return NextResponse.json<AnswerResponse>({
     finished: false,
     question: toPublic(next),
-    question_number: histRows.length + 1,
+    question_number: totalAnswered + 1,
     max_questions: TEST_MAX_QUESTIONS,
   });
 }

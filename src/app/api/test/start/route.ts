@@ -1,7 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/lib/db";
-import { TEST_START_LEVEL, TEST_MAX_QUESTIONS } from "@/lib/test-engine";
-import { pickQuestion, toPublic, type PublicQuestion } from "@/lib/test-server";
+import {
+  TEST_MAX_QUESTIONS,
+  PHASE_1_PLAN,
+} from "@/lib/test-engine";
+import {
+  pickPhase1Question,
+  toPublic,
+  type PublicQuestion,
+} from "@/lib/test-server";
 
 export type StartResponse = {
   attempt_id: string;
@@ -17,7 +24,8 @@ export async function POST(req: NextRequest) {
     null;
   const userAgent = req.headers.get("user-agent") ?? null;
 
-  const first = await pickQuestion(TEST_START_LEVEL, new Set());
+  const slot = PHASE_1_PLAN[0];
+  const first = await pickPhase1Question(slot.niveau, slot.categorie, new Set());
   if (!first) {
     return NextResponse.json(
       {
@@ -30,7 +38,7 @@ export async function POST(req: NextRequest) {
 
   const rows = (await sql`
     INSERT INTO test_attempts (current_level, ip, user_agent)
-    VALUES (${TEST_START_LEVEL}, ${ip}, ${userAgent})
+    VALUES (${first.niveau}, ${ip}, ${userAgent})
     RETURNING id
   `) as { id: string }[];
 
