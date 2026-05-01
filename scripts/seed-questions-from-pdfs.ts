@@ -19,20 +19,22 @@ type Categorie =
 type Cell = { categorie: Categorie; count: number };
 type GridByLevel = Record<number, Cell[]>;
 
-// Grille pédagogique alignée sur le test 2 phases (niveaux 1-10 uniquement)
-// Niveaux 1-3 : lecture lourde (utilisée par la phase 1 du test)
-// Niveaux 4-10 : grammaire / sarf / comprehension (utilisée par la phase 2 ladder)
+// Grille pédagogique focalisée sur les 3 premiers niveaux du programme
+// (le test ne sert qu'à placer en MUQADIMA ALIF / TA3BIR / MUQADIMA BA).
+// 6 questions par cellule pour avoir suffisamment de variété entre élèves.
 const GRID: GridByLevel = {
-  1: [{ categorie: "lecture", count: 4 }, { categorie: "vocabulaire", count: 2 }],
-  2: [{ categorie: "lecture", count: 4 }, { categorie: "vocabulaire", count: 2 }],
-  3: [{ categorie: "lecture", count: 3 }, { categorie: "vocabulaire", count: 2 }, { categorie: "grammaire", count: 1 }],
-  4: [{ categorie: "vocabulaire", count: 2 }, { categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 1 }],
-  5: [{ categorie: "vocabulaire", count: 1 }, { categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 2 }],
-  6: [{ categorie: "vocabulaire", count: 1 }, { categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 2 }, { categorie: "comprehension", count: 1 }],
-  7: [{ categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 2 }, { categorie: "comprehension", count: 1 }],
-  8: [{ categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 1 }, { categorie: "comprehension", count: 2 }],
-  9: [{ categorie: "grammaire", count: 2 }, { categorie: "sarf", count: 1 }, { categorie: "comprehension", count: 1 }, { categorie: "coran", count: 1 }],
-  10: [{ categorie: "grammaire", count: 1 }, { categorie: "sarf", count: 2 }, { categorie: "comprehension", count: 1 }, { categorie: "coran", count: 1 }],
+  1: [
+    { categorie: "lecture", count: 6 },
+    { categorie: "vocabulaire", count: 6 },
+  ],
+  2: [
+    { categorie: "vocabulaire", count: 6 },
+    { categorie: "grammaire", count: 4 },
+  ],
+  3: [
+    { categorie: "grammaire", count: 6 },
+    { categorie: "comprehension", count: 6 },
+  ],
 };
 
 const CATEGORIE_DESC: Record<Categorie, string> = {

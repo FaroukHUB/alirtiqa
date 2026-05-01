@@ -189,8 +189,10 @@ export function TestRunner() {
               ✓
             </span>
             <span>
-              Le test s&apos;adapte à vos réponses : si vous répondez juste, la
-              question suivante est plus difficile, et inversement.
+              Ce test est destiné aux apprenants qui savent déjà{" "}
+              <strong>lire l&apos;arabe</strong>. Si ce n&apos;est pas votre
+              cas, vous pouvez démarrer directement en MUQADIMA ALIF —
+              contactez-nous pour vous inscrire.
             </span>
           </li>
           <li className="flex gap-3">
@@ -198,8 +200,9 @@ export function TestRunner() {
               ✓
             </span>
             <span>
-              <strong>15 questions maximum</strong>. Le test peut s&apos;arrêter
-              avant si votre niveau se stabilise.
+              <strong>5 questions</strong>, à difficulté croissante. Le
+              résultat indique votre niveau d&apos;entrée recommandé dans le
+              programme.
             </span>
           </li>
           <li className="flex gap-3">
@@ -207,7 +210,7 @@ export function TestRunner() {
               ✓
             </span>
             <span>
-              Une seule réponse par question. Pas de retour arrière. Répondez
+              Une seule réponse par question, pas de retour arrière. Répondez
               honnêtement, sans aide extérieure.
             </span>
           </li>
@@ -216,7 +219,7 @@ export function TestRunner() {
               ✓
             </span>
             <span>
-              Durée estimée : <strong>5 à 10 minutes</strong>. Aucune
+              Durée estimée : <strong>2 à 4 minutes</strong>. Aucune
               inscription requise pour passer le test.
             </span>
           </li>
@@ -339,7 +342,7 @@ function QuestionScreen({
       <div className="mb-5 flex items-center justify-between text-xs text-nuit/60">
         <span>
           Question <strong className="text-nuit">{questionNumber}</strong> /{" "}
-          {maxQuestions} max
+          {maxQuestions}
         </span>
         <span className="font-mono text-[10px] uppercase tracking-wider text-nuit/40">
           Astuce : touches 1-{question.choix.length} pour répondre

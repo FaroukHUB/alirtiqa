@@ -106,52 +106,6 @@ export function ResultatClient({
               )}
             </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
-              className="rounded-2xl border border-nuit/10 bg-white p-7 sm:p-9"
-            >
-              <h3 className="font-display text-lg text-nuit">
-                Détail par compétence
-              </h3>
-              <p className="mt-1.5 text-xs text-nuit/55">
-                Pourcentage de bonnes réponses par catégorie évaluée pendant le test.
-              </p>
-              <ul className="mt-6 space-y-4">
-                {(Object.keys(scores) as QuestionCategorie[]).map((cat) => {
-                  const s = scores[cat];
-                  if (!s) return null;
-                  return (
-                    <li key={cat}>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-nuit/80">
-                          {CATEGORIE_LABEL[cat]}
-                        </span>
-                        <span className="font-mono text-xs text-nuit/65">
-                          {s.correct}/{s.total} · {s.pct}%
-                        </span>
-                      </div>
-                      <div className="mt-1.5 h-2 overflow-hidden rounded-full bg-nuit/10">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          animate={{ width: `${s.pct}%` }}
-                          transition={{ duration: 0.6, ease: "easeOut" }}
-                          className={cn(
-                            "h-full rounded-full",
-                            s.pct >= 70
-                              ? "bg-emerald-500"
-                              : s.pct >= 40
-                                ? "bg-dore"
-                                : "bg-rose-400",
-                          )}
-                        />
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            </motion.div>
           </div>
 
           <aside>

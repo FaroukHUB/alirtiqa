@@ -4,7 +4,7 @@ import { TestRunner } from "./TestRunner";
 export const metadata: Metadata = {
   title: "Test de niveau",
   description:
-    "Évaluez votre niveau d'arabe avec notre test adaptatif. Quinze questions maximum, résultat immédiat selon la méthode Al-Furqan.",
+    "Cinq questions pour situer votre niveau d'entrée dans le programme Al-Furqan. Réservé aux apprenants qui savent déjà lire l'arabe.",
 };
 
 export default function TestDeNiveauPage() {
@@ -24,12 +24,12 @@ export default function TestDeNiveauPage() {
             Test de niveau
           </p>
           <h1 className="mt-3 max-w-2xl text-balance font-display text-4xl leading-tight sm:text-5xl">
-            Découvrez votre niveau d&apos;arabe en quelques minutes
+            Trouvez votre point d&apos;entrée dans le programme
           </h1>
           <p className="mt-5 max-w-xl text-creme/75">
-            Test adaptatif en ligne basé sur la méthode Al-Furqan. Le test
-            s&apos;ajuste automatiquement à vos réponses : 15 questions
-            maximum, résultat immédiat avec recommandation de niveau.
+            Cinq questions pour situer votre niveau d&apos;entrée parmi les
+            premiers paliers d&apos;Al-Furqan. Test réservé aux apprenants
+            qui savent déjà lire l&apos;arabe.
           </p>
         </div>
       </section>

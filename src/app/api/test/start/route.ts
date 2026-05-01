@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sql } from "@/lib/db";
-import {
-  TEST_MAX_QUESTIONS,
-  PHASE_1_PLAN,
-} from "@/lib/test-engine";
+import { TEST_PLAN, TEST_QUESTIONS_COUNT } from "@/lib/test-engine";
 import {
   pickPhase1Question,
   toPublic,
@@ -24,7 +21,7 @@ export async function POST(req: NextRequest) {
     null;
   const userAgent = req.headers.get("user-agent") ?? null;
 
-  const slot = PHASE_1_PLAN[0];
+  const slot = TEST_PLAN[0];
   const first = await pickPhase1Question(slot.niveau, slot.categorie, new Set());
   if (!first) {
     return NextResponse.json(
@@ -46,6 +43,6 @@ export async function POST(req: NextRequest) {
     attempt_id: rows[0].id,
     question: toPublic(first),
     question_number: 1,
-    max_questions: TEST_MAX_QUESTIONS,
+    max_questions: TEST_QUESTIONS_COUNT,
   });
 }

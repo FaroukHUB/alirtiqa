@@ -1,7 +1,9 @@
 import "server-only";
 import { sql } from "@/lib/db";
 import type { QuestionCategorie } from "@/lib/db";
-import { TEST_MIN_LEVEL, TEST_MAX_LEVEL } from "@/lib/test-engine";
+
+const POOL_MIN_LEVEL = 1;
+const POOL_MAX_LEVEL = 15;
 
 export type PublicQuestion = {
   id: string;
@@ -98,7 +100,7 @@ export async function pickQuestion(
 
   for (let delta = 1; delta <= 5; delta++) {
     for (const candidate of [level - delta, level + delta]) {
-      if (candidate < TEST_MIN_LEVEL || candidate > TEST_MAX_LEVEL) continue;
+      if (candidate < POOL_MIN_LEVEL || candidate > POOL_MAX_LEVEL) continue;
       const found = await pickAtLevel(candidate, excludeIds);
       if (found) return found;
     }
