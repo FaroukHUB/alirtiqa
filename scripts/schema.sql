@@ -111,3 +111,40 @@ CREATE TABLE IF NOT EXISTS test_answers (
 );
 
 CREATE INDEX IF NOT EXISTS idx_test_answers_attempt_ordre ON test_answers(attempt_id, ordre);
+
+-- Bibliothèque : PDFs partagés sur le site (cahiers, cours, références)
+CREATE TABLE IF NOT EXISTS pdfs (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  titre TEXT NOT NULL,
+  description TEXT,
+  niveau INT CHECK (niveau IS NULL OR (niveau BETWEEN 1 AND 15)),
+  categorie TEXT NOT NULL
+    CHECK (categorie IN ('exercices', 'cours', 'reference', 'coran', 'lecture', 'autre')),
+  blob_url TEXT NOT NULL,
+  blob_pathname TEXT NOT NULL,
+  file_size INT,
+  auteur TEXT,
+  statut TEXT NOT NULL DEFAULT 'published'
+    CHECK (statut IN ('draft', 'published', 'archived')),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_pdfs_statut ON pdfs(statut);
+CREATE INDEX IF NOT EXISTS idx_pdfs_niveau_categorie ON pdfs(niveau, categorie);
+CREATE INDEX IF NOT EXISTS idx_pdfs_created_at ON pdfs(created_at DESC);
+
+-- Capture des téléchargements (lead generation + stats)
+CREATE TABLE IF NOT EXISTS pdf_downloads (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  pdf_id UUID NOT NULL REFERENCES pdfs(id) ON DELETE CASCADE,
+  email TEXT NOT NULL,
+  prenom TEXT,
+  ip TEXT,
+  user_agent TEXT,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_pdf_downloads_pdf ON pdf_downloads(pdf_id);
+CREATE INDEX IF NOT EXISTS idx_pdf_downloads_email ON pdf_downloads(email);
+CREATE INDEX IF NOT EXISTS idx_pdf_downloads_created_at ON pdf_downloads(created_at DESC);

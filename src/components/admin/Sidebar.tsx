@@ -40,7 +40,7 @@ const items: Item[] = [
   {
     href: "/admin/bibliotheque",
     label: "Bibliothèque",
-    enabled: false,
+    enabled: true,
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
         <path d="M4 4v16h4V4z" />

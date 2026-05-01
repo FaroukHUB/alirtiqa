@@ -70,6 +70,40 @@ export type Question = {
   updated_at: string;
 };
 
+export type PdfCategorie =
+  | "exercices"
+  | "cours"
+  | "reference"
+  | "coran"
+  | "lecture"
+  | "autre";
+export type PdfStatut = "draft" | "published" | "archived";
+
+export type Pdf = {
+  id: string;
+  titre: string;
+  description: string | null;
+  niveau: number | null;
+  categorie: PdfCategorie;
+  blob_url: string;
+  blob_pathname: string;
+  file_size: number | null;
+  auteur: string | null;
+  statut: PdfStatut;
+  created_at: string;
+  updated_at: string;
+};
+
+export type PdfDownload = {
+  id: string;
+  pdf_id: string;
+  email: string;
+  prenom: string | null;
+  ip: string | null;
+  user_agent: string | null;
+  created_at: string;
+};
+
 export type TestAttempt = {
   id: string;
   current_level: number;
