@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Props =
   | {
@@ -53,6 +53,20 @@ function ContactModal({ onClose }: { onClose: () => void }) {
   const [error, setError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
 
+  // Lock le scroll du body et écoute Escape pour fermer
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    function onKey(e: KeyboardEvent) {
+      if (e.key === "Escape") onClose();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
   async function submit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
@@ -79,28 +93,33 @@ function ContactModal({ onClose }: { onClose: () => void }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-nuit/40 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto bg-nuit/40 p-4 backdrop-blur-sm"
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
     >
       <div
         className="my-10 w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl sm:p-8"
         onClick={(e) => e.stopPropagation()}
       >
-        <button
-          type="button"
-          onClick={onClose}
-          className="float-right rounded-full p-1.5 text-nuit/55 hover:bg-nuit/5"
-          aria-label="Fermer"
-        >
-          ✕
-        </button>
-
-        <p className="font-display text-[10px] uppercase tracking-[0.3em] text-dore-700">
-          Contact
-        </p>
-        <h2 className="mt-1.5 font-display text-xl text-nuit">
-          Envoyer un message
-        </h2>
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            <p className="font-display text-[10px] uppercase tracking-[0.3em] text-dore-700">
+              Contact
+            </p>
+            <h2 className="mt-1.5 font-display text-xl text-nuit">
+              Envoyer un message
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="-mt-1 -mr-1 flex h-8 w-8 flex-none items-center justify-center rounded-full text-nuit/55 transition-colors hover:bg-nuit/5"
+            aria-label="Fermer"
+          >
+            ✕
+          </button>
+        </div>
 
         {done ? (
           <div className="mt-6">
