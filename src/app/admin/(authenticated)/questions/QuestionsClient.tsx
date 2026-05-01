@@ -40,9 +40,40 @@ const SOURCE_LABEL: Record<Question["source"], string> = {
 };
 
 export function QuestionsClient({ questions }: { questions: Question[] }) {
+  const router = useRouter();
   const [openCreate, setOpenCreate] = useState(false);
   const [openGenerate, setOpenGenerate] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [bulkBusy, setBulkBusy] = useState(false);
+  const [confirmingBulk, setConfirmingBulk] = useState<
+    "publish" | "draft" | "archive" | null
+  >(null);
+
+  const draftIds = questions
+    .filter((q) => q.statut === "draft")
+    .map((q) => q.id);
+  const publishedIds = questions
+    .filter((q) => q.statut === "published")
+    .map((q) => q.id);
+
+  async function bulkAction(action: "publish" | "draft" | "archive") {
+    const ids =
+      action === "publish"
+        ? draftIds
+        : action === "draft"
+          ? publishedIds
+          : questions.map((q) => q.id);
+    if (ids.length === 0) return;
+    setBulkBusy(true);
+    const res = await fetch("/api/admin/questions/bulk", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ ids, action }),
+    });
+    setBulkBusy(false);
+    setConfirmingBulk(null);
+    if (res.ok) router.refresh();
+  }
 
   return (
     <>
@@ -51,7 +82,39 @@ export function QuestionsClient({ questions }: { questions: Question[] }) {
           {questions.length} question{questions.length > 1 ? "s" : ""} affichée
           {questions.length > 1 ? "s" : ""}
         </p>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
+          {draftIds.length > 0 &&
+            (confirmingBulk === "publish" ? (
+              <div className="inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 ring-1 ring-emerald-300">
+                <span className="text-xs text-emerald-900">
+                  Publier {draftIds.length} brouillon
+                  {draftIds.length > 1 ? "s" : ""} ?
+                </span>
+                <button
+                  type="button"
+                  disabled={bulkBusy}
+                  onClick={() => bulkAction("publish")}
+                  className="rounded-full bg-emerald-600 px-3 py-1 text-xs font-medium text-white hover:bg-emerald-700 disabled:opacity-60"
+                >
+                  Confirmer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmingBulk(null)}
+                  className="rounded-full px-2 py-1 text-xs text-nuit/55 hover:bg-white/50"
+                >
+                  Annuler
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setConfirmingBulk("publish")}
+                className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-xs font-medium text-white transition-colors hover:bg-emerald-700"
+              >
+                ✓ Tout publier ({draftIds.length})
+              </button>
+            ))}
           <button
             type="button"
             onClick={() => setOpenGenerate(true)}
