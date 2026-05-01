@@ -46,7 +46,7 @@ export function QuestionsClient({ questions }: { questions: Question[] }) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [bulkBusy, setBulkBusy] = useState(false);
   const [confirmingBulk, setConfirmingBulk] = useState<
-    "publish" | "draft" | "archive" | null
+    "publish" | "draft" | "archive" | "delete" | null
   >(null);
 
   const draftIds = questions
@@ -55,14 +55,17 @@ export function QuestionsClient({ questions }: { questions: Question[] }) {
   const publishedIds = questions
     .filter((q) => q.statut === "published")
     .map((q) => q.id);
+  const allIds = questions.map((q) => q.id);
 
-  async function bulkAction(action: "publish" | "draft" | "archive") {
+  async function bulkAction(
+    action: "publish" | "draft" | "archive" | "delete",
+  ) {
     const ids =
       action === "publish"
         ? draftIds
         : action === "draft"
           ? publishedIds
-          : questions.map((q) => q.id);
+          : allIds;
     if (ids.length === 0) return;
     setBulkBusy(true);
     const res = await fetch("/api/admin/questions/bulk", {
@@ -129,6 +132,39 @@ export function QuestionsClient({ questions }: { questions: Question[] }) {
           >
             + Nouvelle question
           </button>
+          {allIds.length > 0 &&
+            (confirmingBulk === "delete" ? (
+              <div className="inline-flex items-center gap-2 rounded-full bg-rose-50 px-3 py-1.5 ring-1 ring-rose-300">
+                <span className="text-xs text-rose-900">
+                  Supprimer {allIds.length} question
+                  {allIds.length > 1 ? "s" : ""} affichée
+                  {allIds.length > 1 ? "s" : ""} ? (Action irréversible)
+                </span>
+                <button
+                  type="button"
+                  disabled={bulkBusy}
+                  onClick={() => bulkAction("delete")}
+                  className="rounded-full bg-rose-600 px-3 py-1 text-xs font-medium text-white hover:bg-rose-700 disabled:opacity-60"
+                >
+                  Confirmer
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmingBulk(null)}
+                  className="rounded-full px-2 py-1 text-xs text-nuit/55 hover:bg-white/50"
+                >
+                  Annuler
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setConfirmingBulk("delete")}
+                className="inline-flex items-center gap-1.5 rounded-full border border-rose-200 bg-white px-4 py-2 text-xs font-medium text-rose-700 transition-colors hover:bg-rose-50"
+              >
+                ✗ Tout supprimer ({allIds.length})
+              </button>
+            ))}
         </div>
       </div>
 
