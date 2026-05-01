@@ -133,7 +133,7 @@ export function Methode() {
       <div className="container-prose">
         <SectionHeading
           kicker="Notre méthode"
-          title={<>Une pédagogie éprouvée, qui a fait ses preuves</>}
+          title={<>Une pédagogie structurée, qui a fait ses preuves</>}
           description="Inspirée des grands instituts égyptiens, notre méthode allie rigueur grammaticale, immersion progressive et application directe à la lecture et la compréhension du Coran et de la Sounnah."
         />
 
