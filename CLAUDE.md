@@ -13,7 +13,7 @@ Cible : francophones (France + Maghreb + Europe). Cours 100% en ligne via Zoom.
 - **Mail** : SMTP Hostinger via nodemailer
 - **Validation** : Zod
 - **Déploiement** : Vercel (preview + prod)
-- **Domaine** : institut-alirtiqa.com (acheté sur Hostinger)
+- **Domaine** : institut-al-irtiqa.com (acheté sur Hostinger)
 - **Hostinger Business** : domaine + mail SMTP uniquement (pas l'hébergement Node)
 
 ## Design system

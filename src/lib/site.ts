@@ -4,7 +4,7 @@ export const site = {
   tagline: "Apprendre l'arabe selon la méthode égyptienne",
   description:
     "Institut francophone d'apprentissage de la langue arabe. Cours en ligne via Zoom, méthode égyptienne, 15 niveaux progressifs.",
-  url: "https://institut-alirtiqa.com",
+  url: "https://institut-al-irtiqa.com",
   locale: "fr-FR",
   contact: {
     whatsapp: "+33650849738",

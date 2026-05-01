@@ -5,7 +5,7 @@
 **Nom** : Institut Al-Irtiqā'
 **Tagline** : Apprendre l'arabe selon la méthode égyptienne
 **Description** : Institut francophone d'apprentissage de la langue arabe. Cours 100 % en ligne via Zoom, méthode égyptienne, 15 niveaux progressifs.
-**Site web** : https://institut-alirtiqa.com
+**Site web** : https://institut-al-irtiqa.com
 **Public visé** : francophones (France, Maghreb, Europe).
 **Public accueilli** : enfants à partir de 10 ans et adultes.
 
