@@ -189,57 +189,74 @@ async function clearOldIaQuestions(pool: Pool): Promise<{
   return { archived, deleted: deletedRes.rowCount ?? 0 };
 }
 
-async function generateForCell(
+async function callClaude(
   client: Anthropic,
   niveau: number,
-  pdfBase64: string,
   cell: Cell,
+  pdfBase64: string | null,
 ): Promise<GeneratedQuestion[]> {
+  const userContent: Anthropic.MessageParam["content"] = [];
+
+  if (pdfBase64) {
+    userContent.push({
+      type: "document",
+      source: {
+        type: "base64",
+        media_type: "application/pdf",
+        data: pdfBase64,
+      },
+      cache_control: { type: "ephemeral" },
+    });
+  }
+  userContent.push({
+    type: "text",
+    text: buildPrompt(niveau, cell),
+  });
+
   const response = await client.messages.create({
-    model: "claude-sonnet-4-6",
+    model: "claude-haiku-4-5",
     max_tokens: 4096,
     tools: [
       {
         name: "submit_questions",
-        description: `Soumet ${cell.count} question(s) pour le niveau ${niveau}, catégorie ${cell.categorie}, basées sur le PDF du cours.`,
+        description: `Soumet ${cell.count} question(s) pour le niveau ${niveau}, catégorie ${cell.categorie}.`,
         input_schema: TOOL_SCHEMA,
       },
     ],
     tool_choice: { type: "tool", name: "submit_questions" },
-    messages: [
-      {
-        role: "user",
-        content: [
-          {
-            type: "document",
-            source: {
-              type: "base64",
-              media_type: "application/pdf",
-              data: pdfBase64,
-            },
-            // Cache le PDF : sera réutilisé pour les autres catégories du même niveau
-            cache_control: { type: "ephemeral" },
-          },
-          {
-            type: "text",
-            text: buildPrompt(niveau, cell),
-          },
-        ],
-      },
-    ],
+    messages: [{ role: "user", content: userContent }],
   });
 
   const toolUse = response.content.find((b) => b.type === "tool_use");
   if (!toolUse || toolUse.type !== "tool_use") {
     throw new Error("Pas de tool_use dans la réponse Claude");
   }
-
   const input = toolUse.input as { questions: GeneratedQuestion[] };
   if (!Array.isArray(input.questions) || input.questions.length === 0) {
     throw new Error("Tableau questions vide ou invalide");
   }
-
   return input.questions;
+}
+
+async function generateForCell(
+  client: Anthropic,
+  niveau: number,
+  pdfBase64: string,
+  cell: Cell,
+): Promise<{ questions: GeneratedQuestion[]; usedPdf: boolean }> {
+  // Tentative 1 : avec le PDF en contexte
+  try {
+    const questions = await callClaude(client, niveau, cell, pdfBase64);
+    return { questions, usedPdf: true };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    // Fallback texte si PDF trop gros (>200k tokens) ou >100 pages
+    if (msg.includes("prompt is too long") || msg.includes("PDF pages")) {
+      const questions = await callClaude(client, niveau, cell, null);
+      return { questions, usedPdf: false };
+    }
+    throw err;
+  }
 }
 
 async function main() {
@@ -276,12 +293,19 @@ async function main() {
       return;
     }
 
-    // Suppression / archivage des anciennes questions IA
-    console.log("\n→ Nettoyage du pool actuel (questions IA)…");
-    const { archived, deleted } = await clearOldIaQuestions(pool);
-    console.log(
-      `  ✓ ${deleted} supprimée(s), ${archived} archivée(s) (référencées par des tests passés).`,
-    );
+    // Mode "complétion" si --no-clear : on garde les questions déjà en base
+    // et on ne génère que ce qui manque pour atteindre le count visé par cellule.
+    const noClear = process.argv.includes("--no-clear");
+
+    if (!noClear) {
+      console.log("\n→ Nettoyage du pool actuel (questions IA)…");
+      const { archived, deleted } = await clearOldIaQuestions(pool);
+      console.log(
+        `  ✓ ${deleted} supprimée(s), ${archived} archivée(s) (référencées par des tests passés).`,
+      );
+    } else {
+      console.log("\n→ Mode --no-clear : on conserve les questions existantes et on complète uniquement ce qui manque.");
+    }
 
     let totalInserted = 0;
     const failures: { niveau: number; cell: Cell; error: string }[] = [];
@@ -295,15 +319,35 @@ async function main() {
 
       for (let i = 0; i < cells.length; i++) {
         const cell = cells[i];
-        const tag = `  [${i + 1}/${cells.length}] ${cell.categorie} × ${cell.count}`;
+
+        // En mode complétion : combien de questions déjà présentes dans cette cellule ?
+        let need = cell.count;
+        if (noClear) {
+          const existingRes = await pool.query<{ c: string }>(
+            `SELECT COUNT(*)::text AS c FROM questions
+             WHERE niveau = $1 AND categorie = $2 AND source IN ('ia_seed', 'ia_admin')`,
+            [niveau, cell.categorie],
+          );
+          const existing = parseInt(existingRes.rows[0].c, 10);
+          need = Math.max(0, cell.count - existing);
+          if (need === 0) {
+            console.log(
+              `  [${i + 1}/${cells.length}] ${cell.categorie} × ${cell.count}`.padEnd(50) +
+                ` → déjà ${existing}, skip`,
+            );
+            continue;
+          }
+        }
+
+        const tag = `  [${i + 1}/${cells.length}] ${cell.categorie} × ${need}`;
         process.stdout.write(`${tag.padEnd(50)} `);
 
         try {
-          const questions = await generateForCell(
+          const { questions, usedPdf } = await generateForCell(
             client,
             niveau,
             pdf.pdfBase64,
-            cell,
+            { ...cell, count: need },
           );
           let inserted = 0;
           for (const q of questions) {
@@ -330,7 +374,7 @@ async function main() {
             inserted++;
             totalInserted++;
           }
-          console.log(`✓ ${inserted}/${cell.count}`);
+          console.log(`✓ ${inserted}/${need}${usedPdf ? "" : " (sans PDF)"}`);
         } catch (err) {
           const msg = err instanceof Error ? err.message : String(err);
           console.log(`✗ ${msg}`);
