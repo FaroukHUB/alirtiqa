@@ -47,7 +47,7 @@ export default async function AvisPage() {
           </h1>
           <p className="mt-4 max-w-xl text-creme/75">
             {avis.length > 0
-              ? `${avis.length} témoignage${avis.length > 1 ? "s" : ""} d'élèves qui ont rejoint l'institut.`
+              ? "Témoignages d'élèves qui ont rejoint l'institut."
               : "Soyez le premier à laisser votre avis."}
           </p>
         </div>
