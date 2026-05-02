@@ -49,6 +49,18 @@ function fmtDate(iso: string) {
   });
 }
 
+function nextSessionStart(from: Date): string {
+  const d = new Date(
+    Date.UTC(from.getUTCFullYear(), from.getUTCMonth() + 1, 1),
+  );
+  return d.toLocaleDateString("fr-FR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "Europe/Paris",
+  });
+}
+
 function adminBody(i: Inscription): string {
   return [
     `Nouvelle demande reçue le ${fmtDate(i.created_at)}.`,
@@ -66,6 +78,7 @@ function adminBody(i: Inscription): string {
     `Formule souhaitée : ${FORMULE_LABEL[i.formule]}`,
     i.niveau ? `Niveau estimé : ${i.niveau}` : null,
     i.disponibilite ? `Disponibilités : ${i.disponibilite}` : null,
+    `Démarrage prévu : ${nextSessionStart(new Date(i.created_at))}`,
     "",
     i.message ? "— Message —" : null,
     i.message ?? null,
@@ -93,6 +106,10 @@ function candidateBody(i: Inscription): string {
   if (i.disponibilite)
     lignes.push(`  • Disponibilités indiquées : ${i.disponibilite}`);
   lignes.push(
+    `  • Démarrage de la session : ${nextSessionStart(new Date(i.created_at))}`,
+    "",
+    "Toutes nos sessions débutent le 1er du mois. Votre première séance",
+    "sera donc planifiée à partir de cette date.",
     "",
     "Notre équipe vous recontactera in shā'a Llāh sous 48 heures",
     "ouvrées, par WhatsApp ou par email, afin de fixer ensemble un",

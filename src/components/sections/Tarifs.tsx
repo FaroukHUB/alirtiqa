@@ -345,7 +345,27 @@ export function Tarifs() {
           <h3 className="font-display text-xs uppercase tracking-[0.4em] text-dore">
             Modalités
           </h3>
-          <dl className="mt-8 grid gap-x-10 gap-y-2 md:grid-cols-3">
+
+          <div className="mt-6 flex items-start gap-4 rounded-xl border border-dore/40 bg-dore/[0.06] p-4 sm:p-5">
+            <span
+              aria-hidden
+              className="mt-0.5 flex h-10 w-10 flex-none items-center justify-center rounded-full border border-dore/40 bg-dore/[0.1] text-dore"
+            >
+              <ModaliteIcon name="calendar" />
+            </span>
+            <div>
+              <p className="font-display text-[10px] uppercase tracking-[0.3em] text-dore">
+                Démarrage des sessions
+              </p>
+              <p className="mt-1.5 text-sm leading-relaxed text-creme/90">
+                Toutes les sessions débutent le <strong className="text-dore">1er du mois</strong>.
+                Inscrivez-vous à tout moment : votre session démarrera le 1er
+                du mois suivant.
+              </p>
+            </div>
+          </div>
+
+          <dl className="mt-6 grid gap-x-10 gap-y-2 md:grid-cols-3">
             {modalites.map((m, i) => {
               const col = i % 3;
               const row = Math.floor(i / 3);

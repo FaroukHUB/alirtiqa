@@ -145,11 +145,16 @@ export default function ContactPage() {
             ))}
           </ul>
 
-          <div className="mt-10 grid gap-5 md:grid-cols-2">
+          <div className="mt-10 grid gap-5 md:grid-cols-3">
             <InfoCard
               kicker="Disponibilité"
               title="Réponse sous 48h ouvrées"
               description="Notre équipe traite chaque demande personnellement. Les soirs et week-ends peuvent connaître un léger délai."
+            />
+            <InfoCard
+              kicker="Démarrage"
+              title="Sessions au 1er du mois"
+              description="Toutes les sessions débutent le 1er du mois. Inscrivez-vous à tout moment : votre session démarrera le 1er du mois suivant."
             />
             <InfoCard
               kicker="Format"

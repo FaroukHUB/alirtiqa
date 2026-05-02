@@ -117,7 +117,28 @@ export default function TarifsPage() {
             </div>
           </div>
 
-          <p className="mt-8 text-center text-xs text-nuit/55">
+          <div className="mt-8 flex items-center justify-center gap-2.5 text-center text-sm text-nuit/75">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.6"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
+              className="h-4 w-4 flex-none text-dore-700"
+            >
+              <rect x="3" y="5" width="18" height="16" rx="2" />
+              <path d="M3 10h18" />
+              <path d="M8 3v4M16 3v4" />
+            </svg>
+            <span>
+              Toutes les sessions débutent le <strong>1er du mois</strong> —
+              inscription possible à tout moment.
+            </span>
+          </div>
+
+          <p className="mt-3 text-center text-xs text-nuit/55">
             Tous les cours se déroulent en ligne via Zoom. Aucun engagement de
             durée. Le règlement se fait au mois.
           </p>
