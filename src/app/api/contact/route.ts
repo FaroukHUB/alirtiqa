@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
     RETURNING id, prenom, email, sujet, message, lu, ip, user_agent, created_at
   `) as ContactMessage[];
 
-  void sendContactMessage(rows[0]);
+  await sendContactMessage(rows[0]);
 
   return NextResponse.json({ ok: true });
 }

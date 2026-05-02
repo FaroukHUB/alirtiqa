@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
 
   const inscription = rows[0];
 
-  void Promise.allSettled([
+  await Promise.allSettled([
     sendAdminNotif(inscription),
     sendCandidateConfirm(inscription),
   ]);

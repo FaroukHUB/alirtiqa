@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
     ORDER BY ordre ASC
   `) as TestAnswer[];
 
-  void sendTestResultNotif(
+  await sendTestResultNotif(
     {
       ...attempt,
       prenom,
