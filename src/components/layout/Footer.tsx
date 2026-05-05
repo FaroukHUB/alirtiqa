@@ -179,7 +179,15 @@ export function Footer() {
       <div className="border-t border-dore/20">
         <div className="container-prose flex flex-col items-center justify-between gap-3 py-6 text-xs text-nuit/55 sm:flex-row">
           <p>
-            © {year} {site.name}. Tous droits réservés.
+            © {year} {site.name} — Site réalisé par{" "}
+            <a
+              href="https://www.mon-agenceweb.fr"
+              target="_blank"
+              rel="noreferrer"
+              className="font-medium text-nuit/75 transition-colors hover:text-dore-700"
+            >
+              Farouk Web Design
+            </a>
           </p>
           <ul className="flex gap-6">
             {legalNav.map((item) => (
