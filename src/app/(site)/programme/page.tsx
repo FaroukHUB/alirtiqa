@@ -111,35 +111,47 @@ function NiveauCard({
 }) {
   return (
     <li className="group flex flex-col overflow-hidden rounded-2xl border border-nuit/10 bg-white transition-all hover:-translate-y-0.5 hover:border-dore/40 hover:shadow-[0_8px_28px_rgba(10,26,63,0.08)]">
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-creme">
-        <Image
-          src="/images/programme.webp"
-          alt={`Niveau ${niveau.numero} — ${niveau.titre}`}
-          fill
-          priority={priority}
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-        />
-      </div>
-
-      <div className="flex flex-1 flex-col p-5">
-        <div className="flex flex-wrap items-center gap-2">
-          <span className="inline-flex items-center justify-center rounded-full bg-nuit px-2.5 py-0.5 text-[11px] font-bold text-creme">
-            N{niveau.numero}
-          </span>
-          <span
-            className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider ring-1 ${CYCLE_TONE[niveau.cycle]}`}
-          >
-            {niveau.cycle}
-          </span>
+      <Link
+        href={`/programme/${niveau.slug}`}
+        className="flex h-full flex-col focus:outline-none focus-visible:ring-2 focus-visible:ring-dore/60"
+        aria-label={`Voir le détail du niveau ${niveau.numero} — ${niveau.titre}`}
+      >
+        <div className="relative aspect-[16/10] w-full overflow-hidden bg-creme">
+          <Image
+            src="/images/programme.webp"
+            alt={`Niveau ${niveau.numero} — ${niveau.titre}`}
+            fill
+            priority={priority}
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+          />
         </div>
 
-        <h3 className="mt-3 font-display text-lg text-nuit">{niveau.titre}</h3>
+        <div className="flex flex-1 flex-col p-5">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center justify-center rounded-full bg-nuit px-2.5 py-0.5 text-[11px] font-bold text-creme">
+              N{niveau.numero}
+            </span>
+            <span
+              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider ring-1 ${CYCLE_TONE[niveau.cycle]}`}
+            >
+              {niveau.cycle}
+            </span>
+          </div>
 
-        <p className="mt-2 flex-1 text-sm leading-relaxed text-nuit/70">
-          {niveau.contenu}
-        </p>
-      </div>
+          <h3 className="mt-3 font-display text-lg text-nuit transition-colors group-hover:text-dore-700">
+            {niveau.titre}
+          </h3>
+
+          <p className="mt-2 flex-1 text-sm leading-relaxed text-nuit/70">
+            {niveau.contenu}
+          </p>
+
+          <span className="mt-4 inline-flex items-center text-xs font-medium uppercase tracking-[0.2em] text-dore-700">
+            Voir le niveau →
+          </span>
+        </div>
+      </Link>
     </li>
   );
 }
