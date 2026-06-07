@@ -11,6 +11,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "methode-egyptienne", priority: 0.9, changeFrequency: "monthly" },
     { path: "programme", priority: 0.9, changeFrequency: "monthly" },
     { path: "cours-arabe", priority: 0.95, changeFrequency: "monthly" },
+    { path: "cours-arabe/debutant", priority: 0.9, changeFrequency: "monthly" },
     { path: "tarifs", priority: 0.9, changeFrequency: "monthly" },
     { path: "test-de-niveau", priority: 0.8, changeFrequency: "monthly" },
     { path: "inscription", priority: 0.8, changeFrequency: "monthly" },
